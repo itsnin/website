@@ -24,7 +24,6 @@ export default async function ThreadPage({
 
   const res = await apiFetch<ThreadDetail>(`/api/forum/threads/${id}`);
   if (!res.ok) {
-    // if the thread doesn't exist, render the 404 page
     notFound();
   }
 
@@ -78,7 +77,7 @@ export default async function ThreadPage({
             <Clock className="h-3 w-3" />
             {formatDate(thread.createdAt)}
           </span>
-          {/* views — only show if the field exists (added in schema v2) */}
+
           {"views" in thread && typeof thread.views === "number" && (
             <>
               <span aria-hidden className="text-border">·</span>

@@ -33,7 +33,6 @@ export default async function TagsPage() {
           ))}
         </div>
       ) : (
-        // empty state — no tags yet because no articles have been published
         <div className="mt-8 flex flex-col items-center justify-center rounded-2xl border border-dashed hairline bg-card px-6 py-16 text-center shadow-premium-xs">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent-soft">
             <Tag className="h-6 w-6 text-accent" />

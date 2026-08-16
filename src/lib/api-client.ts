@@ -1,4 +1,3 @@
-// relative urls dont resolve on the server so we need an absolute url there
 const isServer = typeof window === "undefined";
 const SERVER_BASE = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
 function buildUrl(path: string): string {
@@ -20,7 +19,6 @@ export async function apiFetch<T>(
       "Content-Type": "application/json",
       ...(init?.headers as Record<string, string>),
     };
-    // no-store ensures fresh data on every call, content site needs this
     const res = await fetch(url, {
       ...init,
       headers,
@@ -179,7 +177,6 @@ export interface ArticleNeighbors {
   prev: { slug: string; title: string } | null;
   next: { slug: string; title: string } | null;
 }
-// includes views field because home page shows "n views" on each card
 export interface PopularArticle {
   id: string;
   slug: string;

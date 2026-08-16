@@ -1,23 +1,12 @@
-// ============================================================================
-// tsconfig.json — TypeScript compiler configuration for the NestJS mini-service.
-// ----------------------------------------------------------------------------
-// Strict mode is MANDATORY per the user's engineering requirements.
-// Docs: https://www.typescriptlang.org/tsconfig/
-// ==========================================================================
 {
   "compilerOptions": {
-    // Target ES2022 so we get top-level await, class fields, etc.
-    // Docs: https://www.typescriptlang.org/tsconfig/#target
     "target": "ES2022",
 
-    // Module ESNext + NodeNext resolution for native ESM support (Bun).
     "module": "ESNext",
     "moduleResolution": "Bundler",
 
-    // Bun runtime types — provides globals like Bun.
     "types": ["bun-types"],
 
-    // Strict family — all enabled. No implicit any, no unchecked access.
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -31,24 +20,19 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
 
-    // Module interop for CommonJS deps (Prisma, NestJS platform-express).
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
 
-    // Emit settings — Bun runs TS directly, but we keep emit for tooling.
     "outDir": "./dist",
     "rootDir": "./src",
     "declaration": true,
     "sourceMap": true,
     "skipLibCheck": true,
 
-    // Decorator metadata — REQUIRED by NestJS for DI to work.
-    // Docs: https://www.typescriptlang.org/docs/handbook/decorators.html
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 
-    // Path alias mirroring the Next.js project for consistency.
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

@@ -1,4 +1,3 @@
-// the category filter uses next.js searchparams so the filter state is in the
 import Link from "next/link";
 import { MessageSquare, Pin, Lock, Reply, Plus, Filter, Eye, Clock } from "lucide-react";
 import { apiFetch, type PaginatedThreads, type CategoryCount } from "@/lib/api-client";
@@ -171,7 +170,7 @@ export default async function ForumPage({
                           {t.category}
                         </span>
                         <span aria-hidden className="text-border">·</span>
-                        {/* "last activity" — the latest reply's createdat if any replies exist, otherwise the thread's createdat */}
+
                         <span className="inline-flex items-center gap-0.5">
                           <Clock className="h-3 w-3" />
                           {formatDate(lastReply ? lastReply.createdAt : t.createdAt)}

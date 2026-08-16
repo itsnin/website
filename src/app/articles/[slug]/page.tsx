@@ -34,8 +34,6 @@ export default async function ArticlePage({
 
   const article = res.data;
 
-  // would duplicate the page's <h1> (rendered above as the article header)
-  // (case-insensitive, trimmed), we remove that first line so only the page
   const stripRedundantTitle = (body: string, title: string): string => {
     const lines = body.split("\n");
     const firstLine = lines[0];
@@ -53,7 +51,6 @@ export default async function ArticlePage({
 
   const cleanBody = article.body ? stripRedundantTitle(article.body, article.title) : "";
 
-  // this would come from env; in dev we use the localhost gateway
   const shareUrl = `https://nin.x/articles/${article.slug}`;
 
   return (
@@ -111,7 +108,7 @@ export default async function ArticlePage({
                 <Clock className="h-3.5 w-3.5" />
                 {article.readingMins} min read
               </span>
-              {/* views — only show if > 0 (new articles start at 0) */}
+
               {"views" in article && typeof article.views === "number" && article.views > 0 && (
                 <>
                   <span aria-hidden className="text-border">·</span>
@@ -149,7 +146,6 @@ export default async function ArticlePage({
                   rehypePlugins={[rehypeSlug, rehypeHighlight]}
                   components={{
                     code: CodeBlock,
-                    // h1 → h2 — demote any remaining markdown h1 to h2 so the
                     h1: ({ node: _node, ...props }) => <h2 {...props} />,
                   }}
                 >
@@ -160,7 +156,6 @@ export default async function ArticlePage({
               )}
             </div>
 
-            {/* `w-56 shrink-0` gives it a fixed width; `sticky top-24` keeps it visible as the user scrolls (24 = 16rem header height + spacing) */}
             <aside className="hidden w-56 shrink-0 lg:block">
               <div className="sticky top-24">
                 <TableOfContents markdown={cleanBody} />

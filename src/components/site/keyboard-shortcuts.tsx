@@ -1,4 +1,3 @@
-// available keyboard shortcuts. also registers the shortcuts themselves
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -33,7 +32,6 @@ export function KeyboardShortcuts() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  // navigate — helper that closes the dialog (if open) and routes
   const navigate = useCallback(
     (path: string) => {
       setOpen(false);
@@ -47,7 +45,6 @@ export function KeyboardShortcuts() {
     let prefixTimeout: ReturnType<typeof setTimeout> | null = null;
 
     const handler = (e: KeyboardEvent) => {
-      // this prevents shortcuts from firing while writing forum posts, etc
       const target = e.target as HTMLElement;
       const tag = target?.tagName?.toLowerCase();
       if (tag === "input" || tag === "textarea" || target?.isContentEditable) {

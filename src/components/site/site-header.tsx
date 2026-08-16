@@ -28,12 +28,10 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // the home "/" is special-cased to avoid matching every route
   const isActive = (href: string): boolean =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    // z-50 ensures it sits above page content. the border + shadow intensify
     <header
       className={`glass-panel sticky top-0 z-50 w-full transition-shadow ${
         scrolled ? "border-b hairline shadow-premium-xs" : "border-b border-transparent"
@@ -79,7 +77,7 @@ export function SiteHeader() {
               ⌘K
             </kbd>
           </Button>
-          {/* mobile search — icon only (no room for the pill) */}
+
           <Button
             variant="ghost"
             size="icon"

@@ -92,7 +92,6 @@ export const reducer = (state: State, action: Action): State => {
     case "DISMISS_TOAST": {
       const { toastId } = action
 
-      // ! side effects ! - this could be extracted into a dismisstoast() action
       if (toastId) {
         addToRemoveQueue(toastId)
       } else {

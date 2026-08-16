@@ -1,52 +1,25 @@
-// ============================================================================
-// Prisma schema for the NiN.X NestJS API.
-// ----------------------------------------------------------------------------
-// This schema defines every persistence concern for the site:
-//   - Users + Auth (email/password + OAuth placeholders, ready to wire later)
-//   - Articles (home feed; empty for now, ready for the owner to populate)
-//   - Forum (threads + replies; read public, write requires auth)
-//   - Shop (products placeholder; implemented later)
-//
-// We use SQLite for portability in this sandbox; swapping to Postgres later
-// only requires changing the `provider` + `url`.
-//
-// Docs: https://pris.ly/d/prisma-schema
-// ==========================================================================
-
-// Client generator — produces the typed PrismaClient.
 generator client {
   provider = "prisma-client-js"
 }
 
-// SQLite datasource — a single file DB lives next to this schema.
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-// ----------------------------------------------------------------------------
-// USER — every account on NiN.X.
-// `role` drives authorization (e.g., only OWNER can post articles).
-// `provider` records how the account was created (EMAIL / GOOGLE / APPLE).
-// ----------------------------------------------------------------------------
 model User {
   id            String   @id @default(cuid())
   email         String   @unique
   name          String?
-  // Hashed password — null for OAuth-only accounts. Stored as plaintext-ready
-  // slot; hashing strategy is implemented in the auth service.
   passwordHash  String?
-  // OAuth provider linkage — empty string for email/password accounts.
   provider      String   @default("EMAIL")
   providerId    String?
   avatarUrl     String?
   role          String   @default("MEMBER") // MEMBER | OWNER | ADMIN
-  // Soft-delete / moderation flags
   banned        Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  // Relations — a user authors articles, forum threads, and forum replies.
   articles      Article[]
   threads       ForumThread[]
   replies       ForumReply[]
@@ -55,25 +28,18 @@ model User {
   @@index([provider, providerId])
 }
 
-// ----------------------------------------------------------------------------
-// ARTICLE — the home feed content. Markdown body rendered client-side.
-// `published` gates visibility; drafts are invisible to the public list.
-// ----------------------------------------------------------------------------
 model Article {
   id          String   @id @default(cuid())
   slug        String   @unique
   title       String
   excerpt     String   @default("")
-  // Markdown source — rendered to HTML on the frontend with react-markdown.
   body        String   @default("")
   coverImage  String?
   tags        String   @default("") // comma-separated; SQLite has no array type
   readingMins Int      @default(1)
   published   Boolean  @default(false)
   featured    Boolean  @default(false)
-  // views — incremented each time an article is viewed. Stored as Int.
   views       Int      @default(0)
-  // Author relation — every article has exactly one author (the owner).
   authorId    String
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
@@ -83,10 +49,6 @@ model Article {
   @@index([slug])
 }
 
-// ----------------------------------------------------------------------------
-// FORUM — threads (top-level posts) + replies (nested under a thread).
-// Anyone can READ; only authenticated users can WRITE (enforced in service).
-// ----------------------------------------------------------------------------
 model ForumThread {
   id        String       @id @default(cuid())
   title     String
@@ -94,9 +56,7 @@ model ForumThread {
   category  String       @default("general")
   pinned    Boolean      @default(false)
   locked    Boolean      @default(false)
-  // views — incremented each time a thread is viewed. Stored as Int.
   views     Int          @default(0)
-  // Author relation — the user who started the thread.
   authorId  String
   author    User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   replies   ForumReply[]
@@ -107,13 +67,9 @@ model ForumThread {
   @@index([authorId])
 }
 
-// ----------------------------------------------------------------------------
-// FORUM REPLY — a single response inside a thread.
-// ----------------------------------------------------------------------------
 model ForumReply {
   id        String     @id @default(cuid())
   body      String
-  // Thread relation — which thread this reply belongs to.
   threadId  String
   thread    ForumThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
   authorId  String
@@ -124,10 +80,6 @@ model ForumReply {
   @@index([threadId, createdAt])
 }
 
-// ----------------------------------------------------------------------------
-// SHOP PRODUCT — placeholder model. Full commerce logic added later.
-// `status` lets us hide upcoming products.
-// ----------------------------------------------------------------------------
 model ShopProduct {
   id          String   @id @default(cuid())
   slug        String   @unique

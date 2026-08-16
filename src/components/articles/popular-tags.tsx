@@ -31,7 +31,6 @@ export async function PopularTags() {
           </Link>
         </div>
 
-        {/* tag pills — flex-wrap so they flow nicely on any width */}
         <div className="mt-6 flex flex-wrap gap-2.5">
           {topTags.map(({ tag, count }) => (
             <Link

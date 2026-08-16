@@ -1,4 +1,3 @@
-// next.js renders automatically when a route doesn't exist or
 // cannot pass functions to client-rendered children
 "use client";
 

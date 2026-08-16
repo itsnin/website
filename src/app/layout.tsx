@@ -1,4 +1,3 @@
-// <html> has no `class="dark"` and no themeprovider — this guarantees
 // the site is light-only, per the user's explicit requirement
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";

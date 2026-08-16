@@ -1,6 +1,3 @@
-// ============================================================================
-// shop.module.ts — wires the Shop feature.
-// ==========================================================================
 import { Module } from "@nestjs/common";
 import { ShopController } from "./shop.controller";
 import { ShopService } from "./shop.service";

@@ -3,7 +3,6 @@ import { articles, users } from "@/db/schema";
 import { eq, gt, desc } from "drizzle-orm";
 import { jsonResponse } from "@/lib/api-helpers";
 
-// get /api/articles/popular — top 3 by views (only views > 0)
 export async function GET() {
   const items = await db
     .select({

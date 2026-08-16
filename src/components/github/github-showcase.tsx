@@ -10,7 +10,6 @@ function formatUpdatedAt(iso: string): string {
   }).format(new Date(iso));
 }
 
-// languagecolor — returns a tailwind bg class for common languages so the
 function languageColor(lang: string | null): string {
   switch (lang) {
     case "TypeScript":

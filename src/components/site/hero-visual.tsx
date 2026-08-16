@@ -1,4 +1,3 @@
-// hero text sits on top (z-10). it's decorative only — `aria-hidden` keeps
 export function HeroVisual() {
   return (
     <div
@@ -19,7 +18,7 @@ export function HeroVisual() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* each arc is a circle stroke with a different radius + opacity cx/cy=0 places the center off-screen so only the arc curves show */}
+
         <circle cx="0" cy="0" r="180" stroke="oklch(0.5 0.11 200 / 0.15)" strokeWidth="1.5" />
         <circle cx="0" cy="0" r="240" stroke="oklch(0.5 0.11 200 / 0.12)" strokeWidth="1.5" />
         <circle cx="0" cy="0" r="300" stroke="oklch(0.5 0.11 200 / 0.09)" strokeWidth="1.5" />

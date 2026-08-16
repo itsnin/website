@@ -23,7 +23,6 @@ export const usersRelations = relations(users, ({ many }) => ({
   replies: many(forumReplies),
 }));
 
-// account + session + verificationtoken — required by auth.js (nextauth)
 export const accounts = sqliteTable("accounts", {
   userId: text("user_id")
     .notNull()

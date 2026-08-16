@@ -1,4 +1,3 @@
-// side renders a muted placeholder so the layout stays balanced
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { apiFetch, type ArticleNeighbors } from "@/lib/api-client";

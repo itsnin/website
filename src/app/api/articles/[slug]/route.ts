@@ -1,4 +1,3 @@
-// also increments the view count (fire-and-forget, non-blocking)
 import { NextRequest } from "next/server";
 import { db } from "@/db";
 import { articles, users } from "@/db/schema";

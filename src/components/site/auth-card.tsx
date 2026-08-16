@@ -17,7 +17,6 @@ export function AuthCard() {
     });
   }, []);
 
-  // while status is loading, render nothing to avoid a flash
   if (!status) return null;
 
   const comingSoon = !status.ready;

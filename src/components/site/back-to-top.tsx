@@ -24,7 +24,6 @@ export function BackToTop() {
   if (!visible) return null;
 
   return (
-    // fixed to the bottom-right, above the footer. z-40 < header's z-50 so the
     <button
       onClick={scrollToTop}
       aria-label="Back to top"

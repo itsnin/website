@@ -6,7 +6,6 @@ interface StatsBannerProps {
 }
 
 export function StatsBanner({ stats }: StatsBannerProps) {
-  // stat_items — declarative config so the render stays clean
   const items: Array<{
     key: keyof SiteStats;
     label: string;
@@ -31,7 +30,7 @@ export function StatsBanner({ stats }: StatsBannerProps) {
             <Icon className="h-5 w-5 text-accent" />
           </div>
           <div className="min-w-0">
-            {/* big number — tabular-nums so digits align nicely */}
+
             <dd className="text-xl font-semibold tabular-nums tracking-tight text-foreground">
               {stats[key]}
             </dd>

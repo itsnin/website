@@ -1,5 +1,3 @@
-// the owner wires a real provider (mailchimp, buttondown, etc.), only the
-// submit handler needs to change
 "use client";
 
 import { useState } from "react";
@@ -20,7 +18,6 @@ export function NewsletterSignup() {
     if (email.trim().length === 0) return;
 
     setSubmitting(true);
-    // simulate a network round-trip so the loading state is visible
     await new Promise((r) => setTimeout(r, 800));
     setSubmitting(false);
     setDone(true);

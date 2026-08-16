@@ -38,15 +38,12 @@ export async function GET(
     .leftJoin(users, eq(articles.authorId, users.id))
     .where(
       // we check 4 patterns to avoid partial-word matches
-      // drizzle doesn't have an `or` for arbitrary conditions directly, so
-      // we use the `or` helper imported above
       like(articles.tags, `%,${decodedTag},%`),
     )
     .orderBy(desc(articles.createdAt))
     .limit(limit)
     .offset(offset);
 
-  // also match start/end/exact patterns in a second query (simpler than or)
   const extra = await db
     .select({
       id: articles.id,
@@ -77,7 +74,6 @@ export async function GET(
     return true;
   });
 
-  // also match exact single-tag + end patterns
   const exact = await db
     .select({
       id: articles.id,
@@ -106,7 +102,6 @@ export async function GET(
     }
   }
 
-  // also match exact (single tag = the decoded tag)
   const singleTag = await db
     .select({
       id: articles.id,

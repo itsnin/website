@@ -1,4 +1,3 @@
-// uses github's public rest api. no auth token required for public repos, but
 // unauthenticated requests are rate-limited to 60/hour per ip
 import { jsonResponse } from "@/lib/api-helpers";
 
@@ -19,7 +18,6 @@ interface RepoShape {
 export async function GET() {
   const username = process.env.GITHUB_USERNAME;
   if (!username) {
-    // no username configured — return empty so the frontend shows the
     return jsonResponse([]);
   }
 

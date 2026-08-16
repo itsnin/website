@@ -1,4 +1,3 @@
-// state. when the owner wires a real provider, only the submit handler changes
 "use client";
 
 import { useState } from "react";
@@ -19,7 +18,6 @@ export function ShopWaitlist() {
     if (email.trim().length === 0) return;
 
     setSubmitting(true);
-    // simulate a network round-trip so the loading state is visible
     await new Promise((r) => setTimeout(r, 800));
     setSubmitting(false);
     setDone(true);

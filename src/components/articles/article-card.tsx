@@ -1,5 +1,3 @@
-// soft layered shadow on hover instead of the default shadow
-// tags as proper accent-tinted pills (not grey chips)
 import Link from "next/link";
 import { Clock, Calendar, Eye } from "lucide-react";
 import type { ArticleSummary } from "@/lib/api-client";
@@ -32,7 +30,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
       href={`/articles/${article.slug}`}
       className="group flex h-full flex-col rounded-2xl border hairline bg-card p-6 shadow-premium-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-premium-md"
     >
-      {/* tags row (optional) — accent-tinted pills instead of grey chips */}
+
       {tags.length > 0 && (
         <div className="mb-3 flex flex-wrap gap-1.5">
           {tags.map((tag) => (
@@ -56,7 +54,6 @@ export function ArticleCard({ article }: ArticleCardProps) {
         </p>
       )}
 
-      {/* meta row — author + reading time + views + date. mt-auto pins it to the bottom desaturated (muted-foreground) and smaller (text-xs) so it reads as secondary info, per apple's typographic hierarchy */}
       <div className="mt-auto flex flex-wrap items-center gap-2 pt-5 text-xs text-muted-foreground">
         <span className="font-medium text-foreground/80">
           {article.author.name ?? "NiN.X"}
@@ -66,7 +63,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
           <Clock className="h-3 w-3" />
           {article.readingMins} min
         </span>
-        {/* views — only show if the field exists and is > 0 */}
+
         {"views" in article && typeof article.views === "number" && article.views > 0 && (
           <>
             <span aria-hidden className="text-border">·</span>

@@ -1,5 +1,3 @@
-// nestjs api and renders them as a compact numbered list. only renders if there
-// are articles with views > 0 (so it's empty on a fresh site)
 import Link from "next/link";
 import { Eye, TrendingUp, ArrowRight } from "lucide-react";
 import { apiFetch, type PopularArticle } from "@/lib/api-client";

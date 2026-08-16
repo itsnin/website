@@ -1,3 +1,8 @@
 # Security Policy
 
-If you find a security issue, please post it in the Issues tab. If you think it should be private, you can email me at ninx.sh@gmail.com
+## Reporting a vulnerability
+
+If you discover a security vulnerability in the source code, please report it responsibly.
+
+- **Public issues:** Open an issue on the [Issues tab](https://github.com/itsnin/website/issues) with the label `security`.
+- **Private disclosure:** Email **ninx.sh@gmail.com** with a description of the vulnerability, steps to reproduce, and potential impact.

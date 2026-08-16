@@ -41,7 +41,7 @@ export function SiteHeader() {
         <Link
           href="/"
           className="text-xl font-semibold tracking-tight text-foreground"
-          aria-label="NiN.X home"
+          aria-label="NiN home"
         >
           <span>NiN</span>
           <span className="text-accent">.X</span>
@@ -69,7 +69,7 @@ export function SiteHeader() {
             variant="ghost"
             className="hidden h-9 items-center gap-2 rounded-full border hairline bg-card px-3 text-sm text-muted-foreground shadow-premium-xs sm:inline-flex"
             aria-label="Search"
-            onClick={() => window.dispatchEvent(new CustomEvent("ninx:open-search"))}
+            onClick={() => window.dispatchEvent(new CustomEvent("nin:open-search"))}
           >
             <Search className="h-4 w-4" />
             <span className="hidden md:inline">Search</span>
@@ -83,7 +83,7 @@ export function SiteHeader() {
             size="icon"
             className="sm:hidden"
             aria-label="Search"
-            onClick={() => window.dispatchEvent(new CustomEvent("ninx:open-search"))}
+            onClick={() => window.dispatchEvent(new CustomEvent("nin:open-search"))}
           >
             <Search className="h-5 w-5" />
           </Button>

@@ -6,7 +6,7 @@ interface AuthorBioProps {
 }
 
 export function AuthorBio({ authorName }: AuthorBioProps) {
-  const displayName = authorName ?? "NiN.X";
+  const displayName = authorName ?? "NiN";
   const initial = displayName.charAt(0).toUpperCase();
 
   return (

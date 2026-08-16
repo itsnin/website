@@ -18,11 +18,11 @@ async function bootstrap(): Promise<void> {
 
   const port = 4000;
   await app.listen(port);
-  Logger.log(`NiN.X API listening on http://localhost:${port}`, "Bootstrap");
+  Logger.log(`NiN API listening on http://localhost:${port}`, "Bootstrap");
 }
 
 bootstrap().catch((err) => {
   // if bootstrap fails, log + exit non-zero so the process manager restarts us
-  console.error("Failed to bootstrap NiN.X API:", err);
+  console.error("Failed to bootstrap NiN API:", err);
   process.exit(1);
 });

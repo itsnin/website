@@ -82,7 +82,7 @@ export function SiteFooter() {
 
         <div className="mt-10 border-t hairline pt-6">
           <p className="text-xs text-muted-foreground">
-            © {year} NiN.X. Built with care.
+            © {year} NiN. Built with care.
           </p>
         </div>
       </div>

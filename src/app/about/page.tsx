@@ -7,7 +7,7 @@ export default function AboutPage() {
       <div className="border-b hairline pb-6">
         <h1 className="text-3xl font-semibold tracking-tight text-foreground">About</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          The person behind NiN.X.
+          The person behind NiN.
         </p>
       </div>
 
@@ -32,7 +32,7 @@ export default function AboutPage() {
               N
             </div>
             <div className="mt-4">
-              <h3 className="text-2xl font-semibold tracking-tight text-foreground">NiN.X</h3>
+              <h3 className="text-2xl font-semibold tracking-tight text-foreground">NiN</h3>
               <p className="mt-1 text-sm font-medium text-accent">Developer · Writer · Open source</p>
             </div>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
@@ -47,7 +47,7 @@ export default function AboutPage() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
                 </span>
-                Currently building NiN.X
+                Currently building NiN
               </div>
               <div className="flex items-center gap-2">
                 <a

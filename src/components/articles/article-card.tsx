@@ -56,7 +56,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
 
       <div className="mt-auto flex flex-wrap items-center gap-2 pt-5 text-xs text-muted-foreground">
         <span className="font-medium text-foreground/80">
-          {article.author.name ?? "NiN.X"}
+          {article.author.name ?? "NiN"}
         </span>
         <span aria-hidden className="text-border">·</span>
         <span className="inline-flex items-center gap-1">

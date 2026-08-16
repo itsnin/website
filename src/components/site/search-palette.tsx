@@ -22,8 +22,8 @@ export function SearchPalette() {
 
   useEffect(() => {
     const handler = () => setOpen(true);
-    window.addEventListener("ninx:open-search", handler);
-    return () => window.removeEventListener("ninx:open-search", handler);
+    window.addEventListener("nin:open-search", handler);
+    return () => window.removeEventListener("nin:open-search", handler);
   }, []);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export function SearchPalette() {
       <DialogContent className="max-w-xl gap-0 overflow-hidden rounded-2xl border hairline p-0 shadow-premium-lg">
         <DialogHeader className="sr-only">
           {/* sr-only keeps header accessible to screen readers */}
-          <DialogTitle>Search NiN.X</DialogTitle>
+          <DialogTitle>Search NiN</DialogTitle>
           <DialogDescription>Search articles and forum threads</DialogDescription>
         </DialogHeader>
 

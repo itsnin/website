@@ -16,14 +16,14 @@ export class AuthGuard implements CanActivate {
       user?: PublicUser;
     }>();
 
-    const userId = request.headers["x-ninx-user-id"];
+    const userId = request.headers["x-nin-user-id"];
     if (typeof userId !== "string" || userId.length === 0) {
       throw new UnauthorizedException("Authentication required");
     }
 
     request.user = {
       id: userId,
-      email: (request.headers["x-ninx-user-email"] as string) ?? "",
+      email: (request.headers["x-nin-user-email"] as string) ?? "",
       name: null,
       role: "MEMBER",
       avatarUrl: null,

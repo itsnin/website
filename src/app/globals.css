@@ -1,5 +1,5 @@
 /* ============================================================================
-   NiN.X Global Stylesheet — v2 (polished)
+   NiN Global Stylesheet — v2 (polished)
    ----------------------------------------------------------------------------
    Design philosophy:
    - Whitish (#F5F5F7 — Apple's signature off-white) is the DOMINANT color.
@@ -304,13 +304,13 @@
   /* Long-form prose container for articles.
      Typography tuned for readability: constrained measure, generous line-height,
      sized type scale, styled code blocks. */
-  .prose-ninx {
+  .prose-nin {
     color: oklch(0.145 0.005 247);
     line-height: 1.8; /* generous line-height for luxury readability */
     font-size: 1.0625rem; /* 17px — slightly larger than body for reading */
     max-width: 68ch; /* ~65-75 char measure per Apple/typography best practice */
   }
-  .prose-ninx h1 {
+  .prose-nin h1 {
     font-size: 2rem;
     font-weight: 600;
     letter-spacing: -0.025em;
@@ -320,7 +320,7 @@
        header when navigated to via the TOC anchor links. */
     scroll-margin-top: 6rem;
   }
-  .prose-ninx h2 {
+  .prose-nin h2 {
     font-size: 1.5rem;
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -330,14 +330,14 @@
     border-bottom: 1px solid oklch(0.875 0.004 247);
     scroll-margin-top: 6rem;
   }
-  .prose-ninx h3 {
+  .prose-nin h3 {
     font-size: 1.25rem;
     font-weight: 600;
     margin-top: 2rem;
     margin-bottom: 0.75rem;
     scroll-margin-top: 6rem;
   }
-  .prose-ninx p {
+  .prose-nin p {
     margin-top: 1.25rem;
     margin-bottom: 1.25rem;
   }
@@ -347,7 +347,7 @@
      Refined: smaller size (2.75rem, was 3.5rem), tighter line-height, more
      margin so it spans ~3 lines instead of dominating the paragraph.
      Docs: https://developer.mozilla.org/en-US/docs/Web/CSS/::first-letter */
-  .prose-ninx > p:first-of-type::first-letter {
+  .prose-nin > p:first-of-type::first-letter {
     font-size: 2.75rem;
     line-height: 0.9;
     font-weight: 700;
@@ -360,7 +360,7 @@
   }
   /* Pull-quote — blockquotes get a larger font + accent left border +
     subtle background tint for a "quoted callout" editorial feel. */
-  .prose-ninx blockquote {
+  .prose-nin blockquote {
     border-left: 3px solid var(--accent);
     background-color: var(--accent-soft);
     padding: 1rem 1.5rem;
@@ -370,24 +370,24 @@
     font-size: 1.125rem;
     margin: 1.5rem 0;
   }
-  .prose-ninx ul, .prose-ninx ol {
+  .prose-nin ul, .prose-nin ol {
     margin-top: 1rem;
     margin-bottom: 1rem;
     padding-left: 1.5rem;
   }
-  .prose-ninx ul { list-style: disc; }
-  .prose-ninx ol { list-style: decimal; }
-  .prose-ninx li { margin-top: 0.375rem; margin-bottom: 0.375rem; }
-  .prose-ninx a {
+  .prose-nin ul { list-style: disc; }
+  .prose-nin ol { list-style: decimal; }
+  .prose-nin li { margin-top: 0.375rem; margin-bottom: 0.375rem; }
+  .prose-nin a {
     color: var(--accent);
     text-decoration: none;
     border-bottom: 1px solid oklch(0.5 0.11 200 / 0.3);
     transition: border-color 0.15s ease;
   }
-  .prose-ninx a:hover {
+  .prose-nin a:hover {
     border-bottom-color: var(--accent);
   }
-  .prose-ninx code {
+  .prose-nin code {
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 0.875em;
     background-color: oklch(0.935 0.004 247);
@@ -395,7 +395,7 @@
     border-radius: 0.3125rem;
     border: 1px solid oklch(0.875 0.004 247);
   }
-  .prose-ninx pre {
+  .prose-nin pre {
     background-color: oklch(0.145 0.005 247); /* dark code block for contrast */
     color: oklch(0.965 0.003 247);
     padding: 1.25rem;
@@ -406,18 +406,18 @@
     line-height: 1.6;
   }
   /* Inline code inside <pre> shouldn't get the inline-code styling. */
-  .prose-ninx pre code {
+  .prose-nin pre code {
     background: transparent;
     border: 0;
     padding: 0;
     color: inherit;
     font-size: inherit;
   }
-  .prose-ninx img {
+  .prose-nin img {
     border-radius: 0.75rem;
     margin: 1.5rem 0;
   }
-  .prose-ninx hr {
+  .prose-nin hr {
     border: 0;
     border-top: 1px solid oklch(0.875 0.004 247);
     margin: 2rem 0;

@@ -95,7 +95,7 @@ export default async function ArticlePage({
                   {(article.author.name ?? "N").charAt(0).toUpperCase()}
                 </div>
                 <span className="font-medium text-foreground/80">
-                  {article.author.name ?? "NiN.X"}
+                  {article.author.name ?? "NiN"}
                 </span>
               </div>
               <span aria-hidden className="text-border">·</span>
@@ -140,7 +140,7 @@ export default async function ArticlePage({
 
           <div className="mt-8 flex gap-12">
             
-            <div className="prose-ninx min-w-0 flex-1">
+            <div className="prose-nin min-w-0 flex-1">
               {cleanBody ? (
                 <ReactMarkdown
                   rehypePlugins={[rehypeSlug, rehypeHighlight]}

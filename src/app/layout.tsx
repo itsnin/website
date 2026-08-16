@@ -19,24 +19,24 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "NiN.X — Development & Writing",
-    template: "%s · NiN.X",
+    default: "NiN — Development & Writing",
+    template: "%s · NiN",
   },
   description:
-    "NiN.X — personal hub for development projects, technical articles, and community discussion.",
-  keywords: ["NiN.X", "development", "articles", "forum", "github", "engineering"],
-  authors: [{ name: "NiN.X" }],
+    "NiN — personal hub for development projects, technical articles, and community discussion.",
+  keywords: ["NiN", "development", "articles", "forum", "github", "engineering"],
+  authors: [{ name: "NiN" }],
   metadataBase: new URL("https://nin.x"),
   openGraph: {
-    title: "NiN.X — Development & Writing",
+    title: "NiN — Development & Writing",
     description: "Personal hub for development projects, articles, and discussion.",
     url: "https://nin.x",
-    siteName: "NiN.X",
+    siteName: "NiN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "NiN.X",
+    title: "NiN",
     description: "Development projects, articles, and discussion.",
   },
 };

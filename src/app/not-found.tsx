@@ -26,7 +26,7 @@ export default function NotFound() {
           Back home
         </Link>
         <button
-          onClick={() => window.dispatchEvent(new CustomEvent("ninx:open-search"))}
+          onClick={() => window.dispatchEvent(new CustomEvent("nin:open-search"))}
           className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground shadow-premium-xs transition-all hover:-translate-y-0.5 hover:shadow-premium-sm"
         >
           <Search className="h-4 w-4" />

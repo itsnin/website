@@ -2,7 +2,7 @@ import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./schema";
 
-const client = createClient({ url: "file:/home/z/my-project/db/ninx.db" });
+const client = createClient({ url: "file:/home/z/my-project/db/nin.db" });
 const db = drizzle(client, { schema });
 
 const now = new Date();
@@ -12,7 +12,7 @@ const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);
 await db.insert(schema.users).values({
   id: "owner-1",
   email: "owner@nin.x",
-  name: "NiN.X",
+  name: "NiN",
   role: "OWNER",
   provider: "EMAIL",
   emailVerified: null,
@@ -88,12 +88,12 @@ Stay typed out there.`,
 
 await db.insert(schema.articles).values({
   id: "art-welcome",
-  slug: "welcome-to-ninx",
-  title: "Welcome to NiN.X",
+  slug: "welcome-to-nin",
+  title: "Welcome to NiN",
   excerpt: "A quick introduction to what this site is and what is coming next.",
   body: `# Welcome
 
-This is the first article on **NiN.X**.
+This is the first article on **NiN**.
 
 ## What to expect
 
@@ -115,7 +115,7 @@ Stay tuned for more.`,
 await db.insert(schema.forumThreads).values({
   id: "thread-welcome",
   title: "Welcome to the forum",
-  body: "This is the first thread. Feel free to discuss anything related to NiN.X.",
+  body: "This is the first thread. Feel free to discuss anything related to NiN.",
   category: "welcome",
   pinned: false,
   locked: false,

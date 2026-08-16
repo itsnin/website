@@ -68,6 +68,7 @@ export async function GET(request: NextRequest) {
         .orderBy(desc(forumReplies.createdAt));
     }
 
+    // group latest replies by thread (take the first = most recent per thread)
     const replyMap = new Map<string, typeof latestReplies[number]>();
     for (const r of latestReplies) {
       if (!replyMap.has(r.threadId)) replyMap.set(r.threadId, r);
@@ -169,6 +170,7 @@ export async function GET(request: NextRequest) {
   return jsonResponse({ items: enrichedItems, total, page, pageSize: limit });
 }
 
+// post /api/forum/threads — create a new thread (auth required)
 export async function POST(request: NextRequest) {
   const user = await requireAuth().catch((r) => r);
   if (user instanceof Response) return user;

@@ -15,6 +15,7 @@ export function CodeBlock({ className, children }: CodeBlockProps) {
   const language = match?.[1];
   const isBlock = !!language || String(children).includes("\n");
 
+  // inline code — return a plain <code> so prose-ninx styles it
   if (!isBlock) {
     return <code className={className}>{children}</code>;
   }
@@ -27,6 +28,7 @@ export function CodeBlock({ className, children }: CodeBlockProps) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
+      // silently fail — clipboard may be blocked in some contexts
     }
   };
 

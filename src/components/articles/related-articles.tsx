@@ -1,3 +1,4 @@
+// related articles (e.g., only one article exists)
 import Link from "next/link";
 import { ArrowRight, Clock, Calendar } from "lucide-react";
 import { apiFetch, type RelatedArticle } from "@/lib/api-client";

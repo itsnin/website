@@ -24,6 +24,7 @@ export default async function ThreadPage({
 
   const res = await apiFetch<ThreadDetail>(`/api/forum/threads/${id}`);
   if (!res.ok) {
+    // if the thread doesn't exist, render the 404 page
     notFound();
   }
 

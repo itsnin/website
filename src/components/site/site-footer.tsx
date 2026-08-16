@@ -1,3 +1,4 @@
+// the footer must stick to the bottom of the viewport when content is
 import Link from "next/link";
 import { Github, Twitter, Mail } from "lucide-react";
 

@@ -1,3 +1,4 @@
+// otherwise renders a client-side composer form
 import { NewThreadComposer } from "@/components/forum/new-thread-composer";
 
 export default function NewThreadPage() {

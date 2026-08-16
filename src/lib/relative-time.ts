@@ -1,3 +1,4 @@
+// formatrelativetime — converts an iso date string to a human-friendly relative time
 export function formatRelativeTime(iso: string, now: Date = new Date()): string {
   const date = new Date(iso);
   const diffMs = now.getTime() - date.getTime();

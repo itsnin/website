@@ -25,6 +25,7 @@ export async function GET() {
   });
 }
 
+// fetchgithubrepos — helper that mirrors the /api/github/repos logic
 async function fetchGitHubRepos(): Promise<Array<{ stargazers_count: number }>> {
   const username = process.env.GITHUB_USERNAME;
   if (!username) return [];

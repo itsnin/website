@@ -1,3 +1,4 @@
+// post: owner-only create (requires auth)
 import { NextRequest } from "next/server";
 import { db } from "@/db";
 import { articles, users } from "@/db/schema";
@@ -60,6 +61,7 @@ export async function GET(request: NextRequest) {
   return jsonResponse({ items: enrichedItems, total, page, pageSize: limit });
 }
 
+// post /api/articles — owner-only create
 export async function POST(request: NextRequest) {
   const user = await requireAuth().catch((r) => r);
   if (user instanceof Response) return user;
@@ -71,6 +73,7 @@ export async function POST(request: NextRequest) {
   }
   const dto = parsed.data;
 
+  // slugify the title if no explicit slug was provided
   const slug =
     dto.slug ??
     dto.title

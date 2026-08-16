@@ -9,6 +9,7 @@ export async function GET() {
     .from(articles)
     .where(eq(articles.published, true));
 
+  // aggregate counts per tag in js (tags are comma-separated)
   const counts = new Map<string, number>();
   for (const r of rows) {
     const tags = r.tags.split(",").map((t) => t.trim()).filter(Boolean);

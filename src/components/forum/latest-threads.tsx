@@ -1,3 +1,4 @@
+// as a compact list. only renders if there are threads
 import Link from "next/link";
 import { MessageSquare, Reply, ArrowRight } from "lucide-react";
 import { apiFetch, type PaginatedThreads } from "@/lib/api-client";

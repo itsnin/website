@@ -1,3 +1,4 @@
+// available keyboard shortcuts. also registers the shortcuts themselves
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -32,6 +33,7 @@ export function KeyboardShortcuts() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
+  // navigate — helper that closes the dialog (if open) and routes
   const navigate = useCallback(
     (path: string) => {
       setOpen(false);

@@ -1,4 +1,4 @@
-// searchparams keeps filter state in the url so its shareable
+// the category filter uses next.js searchparams so the filter state is in the
 import Link from "next/link";
 import { MessageSquare, Pin, Lock, Reply, Plus, Filter, Eye, Clock } from "lucide-react";
 import { apiFetch, type PaginatedThreads, type CategoryCount } from "@/lib/api-client";

@@ -1,3 +1,4 @@
+// coming-soon notice if auth isn't live, otherwise show the live form
 "use client";
 
 import { useEffect, useState } from "react";

@@ -1,3 +1,4 @@
+// relative urls dont resolve on the server so we need an absolute url there
 const isServer = typeof window === "undefined";
 const SERVER_BASE = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
 function buildUrl(path: string): string {
@@ -178,6 +179,7 @@ export interface ArticleNeighbors {
   prev: { slug: string; title: string } | null;
   next: { slug: string; title: string } | null;
 }
+// includes views field because home page shows "n views" on each card
 export interface PopularArticle {
   id: string;
   slug: string;

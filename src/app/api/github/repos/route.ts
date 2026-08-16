@@ -1,4 +1,5 @@
-// unauthenticated github requests are rate-limited to 60/hour per ip
+// uses github's public rest api. no auth token required for public repos, but
+// unauthenticated requests are rate-limited to 60/hour per ip
 import { jsonResponse } from "@/lib/api-helpers";
 
 interface RepoShape {

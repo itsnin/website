@@ -4,6 +4,7 @@ import { sql } from "drizzle-orm";
 import { jsonResponse } from "@/lib/api-helpers";
 
 export async function GET() {
+  // group by category and count threads per category
   const rows = await db
     .select({
       category: forumThreads.category,

@@ -11,7 +11,6 @@ export function BackToTop() {
       setVisible(window.scrollY > 600);
     };
 
-    // passive listener for performance
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);

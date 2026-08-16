@@ -7,7 +7,6 @@ export const users = sqliteTable("users", {
   email: text("email").notNull().unique(),
   emailVerified: integer("email_verified", { mode: "timestamp_ms" }),
   image: text("image"),
-  // null for oauth-only accounts
   passwordHash: text("password_hash"),
   provider: text("provider").notNull().default("EMAIL"),
   providerId: text("provider_id"),

@@ -38,7 +38,6 @@ export function SearchPalette() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  // performsearch — debounced search. we use a 300ms delay so we don't hammer
   const performSearch = useCallback(async (q: string) => {
     if (q.trim().length < 2) {
       setResults(null);

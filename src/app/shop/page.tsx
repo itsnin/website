@@ -1,4 +1,3 @@
-// instead of a generic "coming soon" placeholder, this page uses a high-impact
 import Link from "next/link";
 import { ArrowLeft, ShoppingBag, Sparkles, CheckCircle2 } from "lucide-react";
 import { ShopWaitlist } from "@/components/shop/shop-waitlist";

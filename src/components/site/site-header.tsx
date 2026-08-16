@@ -79,7 +79,6 @@ export function SiteHeader() {
               ⌘K
             </kbd>
           </Button>
-          {/* mobile search — icon only (no room for the pill) */}
           <Button
             variant="ghost"
             size="icon"

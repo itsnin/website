@@ -23,7 +23,6 @@ export default async function Home() {
     <div>
       
       <section className="relative overflow-hidden">
-        {/* herovisual — decorative svg layers (glow, arcs, dots, orb) absolutely positioned at z-0; content below sits at z-10 */}
         <HeroVisual />
 
         <div className="relative z-10 mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">

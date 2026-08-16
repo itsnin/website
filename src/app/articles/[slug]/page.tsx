@@ -35,7 +35,6 @@ export default async function ArticlePage({
   const article = res.data;
 
   // would duplicate the page's <h1> (rendered above as the article header)
-  // (case-insensitive, trimmed), we remove that first line so only the page
   const stripRedundantTitle = (body: string, title: string): string => {
     const lines = body.split("\n");
     const firstLine = lines[0];

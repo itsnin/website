@@ -13,7 +13,6 @@ interface TableOfContentsProps {
   markdown: string;
 }
 
-// react-markdown doesn't auto-generate ids by default, so we add them
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -22,14 +21,12 @@ function slugify(text: string): string {
     .replace(/\s+/g, "-");
 }
 
-// returns an array of { id, text, level }. we skip h1 because the article
 function extractHeadings(markdown: string): TocItem[] {
   const lines = markdown.split("\n");
   const headings: TocItem[] = [];
   let inCodeBlock = false;
 
   for (const line of lines) {
-    // track code fences so we don't match # inside code blocks
     if (line.trim().startsWith("```")) {
       inCodeBlock = !inCodeBlock;
       continue;
@@ -47,7 +44,6 @@ function extractHeadings(markdown: string): TocItem[] {
 }
 
 export function TableOfContents({ markdown }: TableOfContentsProps) {
-  // headings — memoized so we only parse the markdown once
   const headings = useMemo(() => extractHeadings(markdown), [markdown]);
   const [activeId, setActiveId] = useState<string>("");
 

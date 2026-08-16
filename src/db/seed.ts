@@ -5,7 +5,6 @@ import * as schema from "./schema";
 const client = createClient({ url: "file:/home/z/my-project/db/ninx.db" });
 const db = drizzle(client, { schema });
 
-// use slightly different timestamps for each entity so prev/next ordering works
 const now = new Date();
 const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
 const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);

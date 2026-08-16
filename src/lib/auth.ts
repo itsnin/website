@@ -1,7 +1,3 @@
-// driver in db/index.ts — the adapter works with any drizzle-compatible db
-// google oauth (needs google_client_id + google_client_secret env vars)
-// apple oauth (needs apple_* env vars)
-// email/password (credentials provider — needs a real password hashing impl)
 import type { NextAuthOptions } from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import GoogleProvider from "next-auth/providers/google";
@@ -20,7 +16,6 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   pages: { signIn: "/auth" },
   providers: [
-    // google oauth — only enabled if credentials are present
     ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
       ? [
           GoogleProvider({
@@ -29,7 +24,6 @@ export const authOptions: NextAuthOptions = {
           }),
         ]
       : []),
-    // apple oauth — only enabled if credentials are present
     ...(process.env.APPLE_CLIENT_ID && process.env.APPLE_CLIENT_SECRET
       ? [
           AppleProvider({

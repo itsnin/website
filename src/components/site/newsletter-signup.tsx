@@ -1,5 +1,3 @@
-// the owner wires a real provider (mailchimp, buttondown, etc.), only the
-// submit handler needs to change
 "use client";
 
 import { useState } from "react";

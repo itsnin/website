@@ -1,4 +1,3 @@
-// instead of generic "coming soon" placeholders, this page uses high-fidelity
 import Link from "next/link";
 import { Mail, MessageSquare, Github, ArrowUpRight, Clock } from "lucide-react";
 

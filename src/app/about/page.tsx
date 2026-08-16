@@ -1,4 +1,3 @@
-// instead of a single "coming soon" card, this page shows a structured
 import Link from "next/link";
 import { User, Sparkles, Code2, ArrowRight, Clock, Github, Twitter } from "lucide-react";
 

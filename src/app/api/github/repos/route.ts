@@ -1,14 +1,7 @@
-// ============================================================================
-// app/api/github/repos/route.ts — GET the owner's public GitHub repos.
-// ----------------------------------------------------------------------------
-// Uses GitHub's public REST API. No auth token required for public repos, but
-// unauthenticated requests are rate-limited to 60/hour per IP.
-//
-// Docs: https://docs.github.com/en/rest/repos/repos
-// ==========================================================================
+// uses github's public rest api. no auth token required for public repos, but
+// unauthenticated requests are rate-limited to 60/hour per ip
 import { jsonResponse } from "@/lib/api-helpers";
 
-// RepoShape — the minimal projection we return to the frontend.
 interface RepoShape {
   id: number;
   name: string;
@@ -23,12 +16,10 @@ interface RepoShape {
   topics: string[];
 }
 
-// GET /api/github/repos
 export async function GET() {
   const username = process.env.GITHUB_USERNAME;
   if (!username) {
-    // No username configured — return empty so the frontend shows the
-    // "configure your GitHub handle" empty state.
+    // no username configured — return empty so the frontend shows the
     return jsonResponse([]);
   }
 

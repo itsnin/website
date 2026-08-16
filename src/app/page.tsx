@@ -1,18 +1,3 @@
-// ============================================================================
-// page.tsx — home page (article feed) — v2 polished.
-// ----------------------------------------------------------------------------
-// This is the ONLY route the user can see directly. It's a server component
-// that fetches published articles from the NestJS API and renders them.
-//
-// Improvements over v1:
-//   - Hero gets a radial-gradient glow + floating accent orb for depth
-//   - Stats banner (articles / threads / repos) gives the page life
-//   - Article cards refined: softer shadow, better hierarchy
-//   - Newsletter signup section (UI ready, backend deferred)
-//
-// Docs:
-//   - Next.js Server Components: https://nextjs.org/docs/app/building-your-application/rendering/server-components
-// ==========================================================================
 import Link from "next/link";
 import { ArrowRight, BookOpen, Sparkles, Github, MessageSquare, Mail } from "lucide-react";
 import { apiFetch, type PaginatedArticles, type SiteStats } from "@/lib/api-client";
@@ -25,9 +10,7 @@ import { HeroVisual } from "@/components/site/hero-visual";
 import { PopularArticles } from "@/components/articles/popular-articles";
 import { LatestThreads } from "@/components/forum/latest-threads";
 
-// Home is an async Server Component — Next.js awaits it during SSR.
 export default async function Home() {
-  // Fetch articles + site stats in parallel for faster TTFB.
   const [articlesRes, statsRes] = await Promise.all([
     apiFetch<PaginatedArticles>("/api/articles?page=1&pageSize=12"),
     apiFetch<SiteStats>("/api/stats"),
@@ -38,45 +21,35 @@ export default async function Home() {
 
   return (
     <div>
-      {/* ============================================================
-          HERO — with signature SVG visual (concentric arcs + dot grid + glow)
-         ============================================================ */}
+      
       <section className="relative overflow-hidden">
-        {/* HeroVisual — decorative SVG layers (glow, arcs, dots, orb).
-            Absolutely positioned at z-0; content below sits at z-10. */}
+        {/* herovisual — decorative svg layers (glow, arcs, dots, orb) absolutely positioned at z-0; content below sits at z-10 */}
         <HeroVisual />
 
         <div className="relative z-10 mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
           <div className="max-w-3xl animate-fade-up">
-            {/* Eyebrow pill — bordered, with the Sparkles icon in accent. */}
             <div className="inline-flex items-center gap-2 rounded-full border hairline bg-card/80 px-3.5 py-1.5 text-xs font-medium text-muted-foreground shadow-premium-xs backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5 text-accent" />
               Development · Writing · Discussion
             </div>
 
-            {/* Main headline — larger, tighter line-height for that Apple feel.
-                The accent span carries the brand color. */}
             <h1 className="mt-7 text-[2.75rem] font-semibold leading-[1.05] tracking-tight text-foreground sm:text-6xl sm:leading-[1.05]">
               Building things,
               <br />
               <span className="text-accent">writing them down.</span>
             </h1>
 
-            {/* Subhead — bumped to medium weight for better contrast on whitish bg. */}
             <p className="mt-6 max-w-xl text-lg font-medium leading-relaxed text-muted-foreground">
               A personal corner for development projects, technical articles, and
               community discussion. Take a look around.
             </p>
 
-            {/* Primary CTAs — primary button gets a subtle shadow; outline button
-                has a darker border than v1 for visibility. */}
             <div className="mt-9 flex flex-wrap gap-3">
               <a
                 href="#articles"
                 className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-premium-sm transition-all hover:shadow-premium-md hover:-translate-y-0.5"
               >
                 Read articles
-                {/* Arrow nudges right on hover — micro-interaction. */}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <Link
@@ -88,17 +61,12 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* Stats banner — sits at the bottom of the hero, giving the page
-              immediate substance even when articles are sparse. */}
           <div className="mt-16 animate-fade-up" style={{ animationDelay: "0.1s" }}>
             <StatsBanner stats={stats} />
           </div>
         </div>
       </section>
 
-      {/* ============================================================
-          ARTICLES SECTION
-         ============================================================ */}
       <section id="articles" className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
         <div className="flex items-end justify-between border-b hairline pb-5">
           <div>
@@ -115,7 +83,6 @@ export default async function Home() {
         {hasArticles ? (
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {articles.map((article, i) => (
-              // Stagger the fade-up entrance for a cascading reveal.
               <div
                 key={article.id}
                 className="animate-fade-up"
@@ -130,37 +97,19 @@ export default async function Home() {
         )}
       </section>
 
-      {/* ============================================================
-          POPULAR TAGS — compact tag cloud for content discovery
-         ============================================================ */}
       <PopularTags />
 
-      {/* ============================================================
-          MOST READ — popular articles sorted by views (renders only if views > 0)
-         ============================================================ */}
       <PopularArticles />
 
-      {/* ============================================================
-          LATEST FROM THE FORUM — recent community discussions
-         ============================================================ */}
       <LatestThreads />
 
-      {/* ============================================================
-          GITHUB SHOWCASE
-         ============================================================ */}
       <GithubShowcase />
 
-      {/* ============================================================
-          NEWSLETTER SIGNUP — UI ready, backend deferred
-         ============================================================ */}
       <NewsletterSignup />
     </div>
   );
 }
 
-// ----------------------------------------------------------------------------
-// EmptyArticles — shown when no articles have been published yet.
-// ----------------------------------------------------------------------------
 function EmptyArticles() {
   return (
     <div className="mt-8 flex flex-col items-center justify-center rounded-2xl border border-dashed hairline bg-card px-6 py-16 text-center shadow-premium-xs">

@@ -1,20 +1,14 @@
-// ============================================================================
-// app/api/search/route.ts — GET cross-entity search (articles + forum threads).
-// ==========================================================================
 import { NextRequest } from "next/server";
 import { db } from "@/db";
 import { articles, forumThreads } from "@/db/schema";
 import { eq, or, like, desc } from "drizzle-orm";
 import { jsonResponse } from "@/lib/api-helpers";
 
-// GET /api/search?q=...
 export async function GET(request: NextRequest) {
   const q = request.nextUrl.searchParams.get("q") ?? "";
   const query = q.trim();
   if (query.length < 2) return jsonResponse({ articles: [], threads: [] });
 
-  // Search published articles by title/excerpt/body/tags.
-  // SQLite `like` is case-insensitive for ASCII.
   const articleResults = await db
     .select({
       id: articles.id,
@@ -36,7 +30,6 @@ export async function GET(request: NextRequest) {
     .orderBy(desc(articles.createdAt))
     .limit(10);
 
-  // Search forum threads by title/body.
   const threadResults = await db
     .select({
       id: forumThreads.id,

@@ -1,11 +1,4 @@
-// ============================================================================
-// forum/new/page.tsx — "start a new thread" page.
-// ----------------------------------------------------------------------------
-// Gated on auth status. If auth isn't ready, shows a coming-soon notice.
-// Otherwise renders a client-side composer form.
-//
-// Docs: https://nextjs.org/docs/app/building-your-application/routing
-// ==========================================================================
+// otherwise renders a client-side composer form
 import { NewThreadComposer } from "@/components/forum/new-thread-composer";
 
 export default function NewThreadPage() {
@@ -18,7 +11,6 @@ export default function NewThreadPage() {
         Share a question, idea, or discussion topic with the community.
       </p>
       <div className="mt-8">
-        {/* Client component handles auth-gating + submission. */}
         <NewThreadComposer />
       </div>
     </div>

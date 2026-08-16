@@ -1,22 +1,12 @@
-// ============================================================================
-// related-articles.tsx — "keep reading" section on the article detail page.
-// ----------------------------------------------------------------------------
-// Server Component. Fetches related articles (by tag overlap) from the NestJS
-// API and renders them as a compact card row. Hidden entirely if there are no
-// related articles (e.g., only one article exists).
-//
-// Docs: https://nextjs.org/docs/app/building-your-application/rendering/server-components
-// ==========================================================================
+// related articles (e.g., only one article exists)
 import Link from "next/link";
 import { ArrowRight, Clock, Calendar } from "lucide-react";
 import { apiFetch, type RelatedArticle } from "@/lib/api-client";
 
 interface RelatedArticlesProps {
-  // slug — the current article's slug, used to fetch related ones.
   slug: string;
 }
 
-// formatDate — consistent with the article card.
 function formatDate(iso: string): string {
   return new Intl.DateTimeFormat("en-US", {
     month: "short",
@@ -26,14 +16,11 @@ function formatDate(iso: string): string {
 }
 
 export async function RelatedArticles({ slug }: RelatedArticlesProps) {
-  // Fetch related articles. Falls back to empty array on error.
   const res = await apiFetch<RelatedArticle[]>(
     `/api/articles/${encodeURIComponent(slug)}/related`,
   );
   const related = res.ok ? res.data : [];
 
-  // Don't render the section at all if there's nothing to show — cleaner than
-  // an empty "related" box.
   if (related.length === 0) return null;
 
   return (
@@ -49,7 +36,6 @@ export async function RelatedArticles({ slug }: RelatedArticlesProps) {
         </div>
       </div>
 
-      {/* Compact card row — smaller than the home grid, focused on titles. */}
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {related.map((a) => (
           <Link
@@ -57,7 +43,6 @@ export async function RelatedArticles({ slug }: RelatedArticlesProps) {
             href={`/articles/${a.slug}`}
             className="group flex flex-col rounded-xl border hairline bg-card p-5 shadow-premium-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-premium-sm"
           >
-            {/* Tags (if any) — accent pills */}
             {a.tags && (
               <div className="mb-2 flex flex-wrap gap-1">
                 {a.tags
@@ -76,19 +61,16 @@ export async function RelatedArticles({ slug }: RelatedArticlesProps) {
               </div>
             )}
 
-            {/* Title */}
             <h3 className="font-medium leading-snug text-foreground transition-colors group-hover:text-accent">
               {a.title}
             </h3>
 
-            {/* Excerpt — 2 lines */}
             {a.excerpt && (
               <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">
                 {a.excerpt}
               </p>
             )}
 
-            {/* Meta + arrow */}
             <div className="mt-auto flex items-center gap-2 pt-4 text-xs text-muted-foreground">
               <span className="inline-flex items-center gap-0.5">
                 <Calendar className="h-3 w-3" />

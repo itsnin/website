@@ -1,13 +1,5 @@
-// ============================================================================
-// newsletter-signup.tsx — UI-ready newsletter signup section.
-// ----------------------------------------------------------------------------
-// The form is fully built but submission is deferred (no backend yet). On
-// submit we show a friendly toast confirming the signup is "pending". When
-// the owner wires a real provider (Mailchimp, Buttondown, etc.), only the
-// submit handler needs to change.
-//
-// Docs: https://ui.shadcn.com/docs/components/input
-// ==========================================================================
+// the owner wires a real provider (mailchimp, buttondown, etc.), only the
+// submit handler needs to change
 "use client";
 
 import { useState } from "react";
@@ -17,11 +9,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
 export function NewsletterSignup() {
-  // email — controlled input value.
   const [email, setEmail] = useState("");
-  // submitting — disables the form while the fake request is in flight.
   const [submitting, setSubmitting] = useState(false);
-  // done — flips to a success state after "submission".
   const [done, setDone] = useState(false);
 
   const { toast } = useToast();
@@ -31,8 +20,7 @@ export function NewsletterSignup() {
     if (email.trim().length === 0) return;
 
     setSubmitting(true);
-    // Simulate a network round-trip so the loading state is visible.
-    // Replace with a real fetch to the newsletter provider when wired.
+    // simulate a network round-trip so the loading state is visible
     await new Promise((r) => setTimeout(r, 800));
     setSubmitting(false);
     setDone(true);
@@ -46,16 +34,13 @@ export function NewsletterSignup() {
   return (
     <section className="border-t hairline bg-background">
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
-        {/* Card container — accent-tinted background to distinguish from page bg */}
         <div className="relative overflow-hidden rounded-3xl border hairline bg-card p-8 shadow-premium-sm sm:p-12">
-          {/* Decorative glow inside the card */}
           <div
             aria-hidden
             className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-accent-soft blur-2xl"
           />
 
           <div className="relative flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
-            {/* Left: copy */}
             <div className="max-w-md">
               <div className="inline-flex items-center gap-2 rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent">
                 <Mail className="h-3.5 w-3.5" />
@@ -70,10 +55,8 @@ export function NewsletterSignup() {
               </p>
             </div>
 
-            {/* Right: form OR success state */}
             <div className="w-full max-w-sm">
               {done ? (
-                // Success state — shown after "submission".
                 <div className="flex items-center gap-3 rounded-xl border hairline bg-background p-4">
                   <CheckCircle2 className="h-5 w-5 shrink-0 text-accent" />
                   <p className="text-sm font-medium text-foreground">

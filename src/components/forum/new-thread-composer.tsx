@@ -1,9 +1,4 @@
-// ============================================================================
-// new-thread-composer.tsx — client-side form to create a forum thread.
-// ----------------------------------------------------------------------------
-// Mirrors the reply-composer pattern: check auth status first, show a
-// coming-soon notice if auth isn't live, otherwise show the live form.
-// ==========================================================================
+// coming-soon notice if auth isn't live, otherwise show the live form
 "use client";
 
 import { useEffect, useState } from "react";
@@ -26,14 +21,12 @@ export function NewThreadComposer() {
   const { toast } = useToast();
   const router = useRouter();
 
-  // Fetch auth readiness on mount.
   useEffect(() => {
     apiFetch<AuthStatus>("/api/auth/status").then((res) => {
       if (res.ok) setAuthStatus(res.data);
     });
   }, []);
 
-  // Coming-soon state when auth isn't wired yet.
   if (authStatus && !authStatus.ready) {
     return (
       <div className="rounded-xl border border-dashed hairline bg-card px-5 py-8 text-center">
@@ -57,7 +50,6 @@ export function NewThreadComposer() {
 
     if (res.ok) {
       toast({ title: "Thread created", description: "Your discussion is now live." });
-      // Navigate to the new thread. res.data is the created thread with its id.
       const data = res.data as { id: string };
       router.push(`/forum/${data.id}`);
     } else {
@@ -71,7 +63,6 @@ export function NewThreadComposer() {
 
   return (
     <div className="space-y-5 rounded-xl border hairline bg-card p-5">
-      {/* Title field */}
       <div className="space-y-2">
         <Label htmlFor="thread-title">Title</Label>
         <Input
@@ -83,7 +74,6 @@ export function NewThreadComposer() {
         />
       </div>
 
-      {/* Category field */}
       <div className="space-y-2">
         <Label htmlFor="thread-category">Category</Label>
         <Input
@@ -95,7 +85,6 @@ export function NewThreadComposer() {
         />
       </div>
 
-      {/* Body field */}
       <div className="space-y-2">
         <Label htmlFor="thread-body">Body</Label>
         <Textarea

@@ -1,24 +1,4 @@
-// ============================================================================
-// keyboard-shortcuts.tsx — global keyboard shortcuts help dialog.
-// ----------------------------------------------------------------------------
-// Listens for the `?` key (and `/`) to open a help dialog showing all
-// available keyboard shortcuts. Also registers the shortcuts themselves:
-//   ? or /  → open this help dialog
-//   Cmd/Ctrl+K → open search (already handled by SearchPalette)
-//   g h     → go home
-//   g f     → go to forum
-//   g s     → go to shop
-//   g a     → go to about
-//   g c     → go to contact
-//   g t     → go to tags
-//   Esc     → close dialog
-//
-// The "g" prefix pattern is inspired by GitHub's keyboard navigation.
-//
-// Docs:
-//   - KeyboardEvent: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
-//   - useRouter: https://nextjs.org/docs/app/api-reference/functions/use-router
-// ==========================================================================
+// available keyboard shortcuts. also registers the shortcuts themselves
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -32,13 +12,11 @@ import {
 } from "@/components/ui/dialog";
 import { Keyboard } from "lucide-react";
 
-// Shortcut — a single keyboard shortcut entry for the help display.
 interface Shortcut {
   keys: string[];
   description: string;
 }
 
-// SHORTCUTS — the list shown in the help dialog.
 const SHORTCUTS: Shortcut[] = [
   { keys: ["⌘", "K"], description: "Open search" },
   { keys: ["?"], description: "Show this help" },
@@ -52,11 +30,10 @@ const SHORTCUTS: Shortcut[] = [
 ];
 
 export function KeyboardShortcuts() {
-  // open — controls dialog visibility.
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  // navigate — helper that closes the dialog (if open) and routes.
+  // navigate — helper that closes the dialog (if open) and routes
   const navigate = useCallback(
     (path: string) => {
       setOpen(false);
@@ -66,35 +43,27 @@ export function KeyboardShortcuts() {
   );
 
   useEffect(() => {
-    // prefixKey — tracks whether "g" was pressed and we're waiting for the
-    // second key in a "g x" sequence. Resets after 1.5s of inactivity.
     let prefixKey = false;
     let prefixTimeout: ReturnType<typeof setTimeout> | null = null;
 
     const handler = (e: KeyboardEvent) => {
-      // Ignore key events when the user is typing in an input/textarea.
-      // This prevents shortcuts from firing while writing forum posts, etc.
-      // Docs: https://developer.mozilla.org/en-US/docs/Web/API/Element/tagName
+      // this prevents shortcuts from firing while writing forum posts, etc
       const target = e.target as HTMLElement;
       const tag = target?.tagName?.toLowerCase();
       if (tag === "input" || tag === "textarea" || target?.isContentEditable) {
         return;
       }
 
-      // Cmd/Ctrl+K is handled by SearchPalette; don't interfere.
       if ((e.metaKey || e.ctrlKey) && e.key === "k") return;
 
-      // "?" or "/" → open help dialog.
       if (e.key === "?" || e.key === "/") {
         e.preventDefault();
         setOpen((o) => !o);
         return;
       }
 
-      // "g" prefix — start a sequence.
       if (e.key === "g" && !prefixKey) {
         prefixKey = true;
-        // Reset the prefix after 1.5s if no second key is pressed.
         if (prefixTimeout) clearTimeout(prefixTimeout);
         prefixTimeout = setTimeout(() => {
           prefixKey = false;
@@ -102,7 +71,6 @@ export function KeyboardShortcuts() {
         return;
       }
 
-      // If we're in a "g" sequence, handle the second key.
       if (prefixKey) {
         prefixKey = false;
         if (prefixTimeout) clearTimeout(prefixTimeout);
@@ -153,7 +121,6 @@ export function KeyboardShortcuts() {
           </DialogDescription>
         </DialogHeader>
 
-        {/* Shortcuts list — each row shows the keys + description. */}
         <ul className="mt-4 space-y-2">
           {SHORTCUTS.map((s) => (
             <li

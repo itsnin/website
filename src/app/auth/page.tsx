@@ -1,12 +1,3 @@
-// ============================================================================
-// auth/page.tsx — sign-in / sign-up page (UI ready, auth coming soon).
-// ----------------------------------------------------------------------------
-// Fetches /api/auth/status. If auth isn't ready, shows a polished "coming
-// soon" state with the Google/Apple/Email buttons disabled. When the owner
-// wires real auth later, this page already has the full UI in place.
-//
-// Docs: https://nextjs.org/docs/app/building-your-application/routing
-// ==========================================================================
 import { AuthCard } from "@/components/site/auth-card";
 
 export default function AuthPage() {
@@ -20,7 +11,6 @@ export default function AuthPage() {
           Sign in to post in the forum and join the discussion.
         </p>
 
-        {/* AuthCard is a client component that checks auth readiness. */}
         <div className="mt-8">
           <AuthCard />
         </div>

@@ -1,8 +1,4 @@
-// ============================================================================
-// app/api/forum/threads/[id]/route.ts — GET single thread + paginated replies.
-// ----------------------------------------------------------------------------
-// Also increments the thread's view count (fire-and-forget).
-// ==========================================================================
+// also increments the thread's view count (fire-and-forget)
 import { NextRequest } from "next/server";
 import { db } from "@/db";
 import { forumThreads, forumReplies, users } from "@/db/schema";
@@ -10,7 +6,6 @@ import { eq, desc, sql } from "drizzle-orm";
 import { paginationSchema } from "@/lib/validations";
 import { jsonResponse, errorResponse } from "@/lib/api-helpers";
 
-// GET /api/forum/threads/:id
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -25,7 +20,6 @@ export async function GET(
   const limit = Math.min(pageSize, 100);
   const offset = (page - 1) * limit;
 
-  // Fetch the thread + author.
   const threadRows = await db
     .select({
       id: forumThreads.id,
@@ -48,14 +42,12 @@ export async function GET(
   const thread = threadRows[0];
   if (!thread) return errorResponse("Thread not found", 404);
 
-  // Increment views (fire-and-forget).
   db.update(forumThreads)
     .set({ views: sql`${forumThreads.views} + 1` })
     .where(eq(forumThreads.id, id))
     .then(() => {})
     .catch(() => {});
 
-  // Fetch paginated replies (oldest first for forum reading order).
   const replies = await db
     .select({
       id: forumReplies.id,
@@ -71,7 +63,6 @@ export async function GET(
     .limit(limit)
     .offset(offset);
 
-  // Count total replies.
   const totalRows = await db
     .select({ count: sql<number>`count(*)` })
     .from(forumReplies)

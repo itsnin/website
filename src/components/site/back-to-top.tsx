@@ -1,46 +1,30 @@
-// ============================================================================
-// back-to-top.tsx — floating button that scrolls to the top of the page.
-// ----------------------------------------------------------------------------
-// Appears after the user scrolls down past ~600px. Clicking it smooth-scrolls
-// back to the top. Hidden on short pages where there's nothing to scroll.
-//
-// Docs:
-//   - window.scrollTo: https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollTo
-//   - scroll behavior: https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior
-// ==========================================================================
 "use client";
 
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 
 export function BackToTop() {
-  // visible — controls whether the button is rendered.
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // onScroll — toggles visibility based on scroll position.
     const onScroll = () => {
-      // Show the button after scrolling past ~600px (roughly one viewport).
       setVisible(window.scrollY > 600);
     };
 
-    // Passive listener for performance.
+    // passive listener for performance
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // scrollToTop — smooth-scrolls to the top.
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Render nothing when not visible — keeps the DOM clean.
   if (!visible) return null;
 
   return (
-    // Fixed to the bottom-right, above the footer. z-40 < header's z-50 so the
-    // sticky header stays on top if they overlap.
+    // fixed to the bottom-right, above the footer. z-40 < header's z-50 so the
     <button
       onClick={scrollToTop}
       aria-label="Back to top"

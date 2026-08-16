@@ -1,20 +1,10 @@
-// ============================================================================
-// about/page.tsx — about page with a skeleton layout.
-// ----------------------------------------------------------------------------
-// Instead of a single "coming soon" card, this page shows a structured
-// skeleton with three sections (Bio, Focus areas, Stack) that signal
-// intentional structure coming soon. Each section uses a muted placeholder
-// that feels deliberate rather than empty.
-//
-// Docs: https://nextjs.org/docs/app/building-your-application/rendering/server-components
-// ==========================================================================
+// instead of a single "coming soon" card, this page shows a structured
 import Link from "next/link";
 import { User, Sparkles, Code2, ArrowRight, Clock, Github, Twitter } from "lucide-react";
 
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
-      {/* ---- Page header ---- */}
       <div className="border-b hairline pb-6">
         <h1 className="text-3xl font-semibold tracking-tight text-foreground">About</h1>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -22,11 +12,6 @@ export default function AboutPage() {
         </p>
       </div>
 
-      {/* ---- Skeleton sections ---- */}
-      {/* Three sections that show the intended structure of the about page.
-          Each has an icon, a title, and muted placeholder content. */}
-
-      {/* Section 1: Bio — hero treatment with large avatar + status line */}
       <section className="mt-10">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-soft">
@@ -35,7 +20,6 @@ export default function AboutPage() {
           <h2 className="text-lg font-semibold tracking-tight text-foreground">Bio</h2>
         </div>
         <div className="mt-4 overflow-hidden rounded-2xl border hairline bg-card shadow-premium-sm">
-          {/* Gradient header strip — gives the card visual weight */}
           <div
             aria-hidden
             className="h-20 w-full"
@@ -44,35 +28,28 @@ export default function AboutPage() {
                 "linear-gradient(135deg, oklch(0.5 0.11 200 / 0.15), oklch(0.62 0.11 230 / 0.10))",
             }}
           />
-          {/* Content — avatar overlaps the gradient strip, name/role/bio below */}
           <div className="px-6 pb-6 sm:px-8 sm:pb-8">
-            {/* Avatar — large, pulled up to overlap the gradient strip */}
             <div className="-mt-12 flex h-24 w-24 items-center justify-center rounded-2xl border-4 border-card bg-accent-soft text-3xl font-semibold text-accent shadow-premium-sm">
               N
             </div>
-            {/* Name + role — larger, more prominent */}
             <div className="mt-4">
               <h3 className="text-2xl font-semibold tracking-tight text-foreground">NiN.X</h3>
               <p className="mt-1 text-sm font-medium text-accent">Developer · Writer · Open source</p>
             </div>
-            {/* Bio text */}
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
               Hi — I build things in the open and write about the process.
               This site is a personal hub for development projects, technical
               articles, and community discussion. A more detailed bio will
               land here as the site grows.
             </p>
-            {/* "Currently building" status line — adds presence + activity */}
             <div className="mt-5 flex flex-wrap items-center gap-3">
               <div className="inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent">
                 <span className="relative flex h-2 w-2">
-                  {/* Pulsing dot — signals "online / active" */}
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
                 </span>
                 Currently building NiN.X
               </div>
-              {/* Social proof badges */}
               <div className="flex items-center gap-2">
                 <a
                   href="https://github.com"
@@ -98,7 +75,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Section 2: Focus areas */}
       <section className="mt-8">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-soft">
@@ -107,7 +83,6 @@ export default function AboutPage() {
           <h2 className="text-lg font-semibold tracking-tight text-foreground">Focus areas</h2>
         </div>
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
-          {/* Three focus-area placeholder cards */}
           {["Development", "Writing", "Open source"].map((label) => (
             <div
               key={label}
@@ -125,7 +100,6 @@ export default function AboutPage() {
         </p>
       </section>
 
-      {/* Section 3: Stack */}
       <section className="mt-8">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-soft">
@@ -134,7 +108,6 @@ export default function AboutPage() {
           <h2 className="text-lg font-semibold tracking-tight text-foreground">Stack</h2>
         </div>
         <div className="mt-4 rounded-2xl border hairline bg-card p-6 shadow-premium-xs">
-          {/* Stack pills — muted placeholder pills showing the intended layout. */}
           <div className="flex flex-wrap gap-2">
             {["Next.js", "NestJS", "TypeScript", "Prisma", "Tailwind", "React"].map((tech) => (
               <span
@@ -151,7 +124,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ---- Footer note + CTA ---- */}
       <div className="mt-10 flex flex-col items-center gap-3 rounded-2xl border border-dashed hairline bg-card p-6 text-center shadow-premium-xs sm:flex-row sm:justify-between sm:text-left">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Clock className="h-4 w-4 text-accent" />

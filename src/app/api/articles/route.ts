@@ -1,11 +1,4 @@
-// ============================================================================
-// app/api/articles/route.ts — GET (list) + POST (create) articles.
-// ----------------------------------------------------------------------------
-// GET: public list of published articles, paginated, newest first.
-// POST: owner-only create (requires auth).
-//
-// Docs: https://nextjs.org/docs/app/building-your-application/routing/route-handlers
-// ==========================================================================
+// post: owner-only create (requires auth)
 import { NextRequest } from "next/server";
 import { db } from "@/db";
 import { articles, users } from "@/db/schema";
@@ -13,9 +6,7 @@ import { eq, desc, sql, and } from "drizzle-orm";
 import { paginationSchema, createArticleSchema } from "@/lib/validations";
 import { jsonResponse, errorResponse, requireAuth } from "@/lib/api-helpers";
 
-// GET /api/articles — public list.
 export async function GET(request: NextRequest) {
-  // Parse + validate query params with Zod. `coerce` turns strings into numbers.
   const query = paginationSchema.safeParse(Object.fromEntries(request.nextUrl.searchParams));
   if (!query.success) return errorResponse("Invalid pagination params", 400);
 
@@ -23,7 +14,6 @@ export async function GET(request: NextRequest) {
   const limit = Math.min(pageSize, 50);
   const offset = (page - 1) * limit;
 
-  // Fetch published articles with author info, newest first.
   const items = await db
     .select({
       id: articles.id,
@@ -47,7 +37,6 @@ export async function GET(request: NextRequest) {
     .limit(limit)
     .offset(offset);
 
-  // Map to include the nested `author` object the frontend expects.
   const enrichedItems = items.map((a) => ({
     id: a.id,
     slug: a.slug,
@@ -63,7 +52,6 @@ export async function GET(request: NextRequest) {
     author: { id: a.authorId, name: a.authorName },
   }));
 
-  // Count total published articles for pagination metadata.
   const totalRows = await db
     .select({ count: sql<number>`count(*)` })
     .from(articles)
@@ -73,13 +61,11 @@ export async function GET(request: NextRequest) {
   return jsonResponse({ items: enrichedItems, total, page, pageSize: limit });
 }
 
-// POST /api/articles — owner-only create.
+// post /api/articles — owner-only create
 export async function POST(request: NextRequest) {
-  // requireAuth throws a 401 if not authenticated.
   const user = await requireAuth().catch((r) => r);
   if (user instanceof Response) return user;
 
-  // Parse + validate the body with Zod.
   const body = await request.json().catch(() => null);
   const parsed = createArticleSchema.safeParse(body);
   if (!parsed.success) {
@@ -87,7 +73,7 @@ export async function POST(request: NextRequest) {
   }
   const dto = parsed.data;
 
-  // Slugify the title if no explicit slug was provided.
+  // slugify the title if no explicit slug was provided
   const slug =
     dto.slug ??
     dto.title
@@ -97,14 +83,11 @@ export async function POST(request: NextRequest) {
       .trim()
       .replace(/\s+/g, "-");
 
-  // Estimate reading time from word count (200 wpm).
   const wordCount = (dto.body ?? "").split(/\s+/).filter(Boolean).length;
   const readingMins = Math.max(1, Math.round(wordCount / 200));
 
-  // Generate a cuid-like id (timestamp + random).
   const id = `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 
-  // Insert the article.
   const [created] = await db
     .insert(articles)
     .values({

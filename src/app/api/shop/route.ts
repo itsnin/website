@@ -1,12 +1,8 @@
-// ============================================================================
-// app/api/shop/route.ts — GET visible shop products.
-// ==========================================================================
 import { db } from "@/db";
 import { shopProducts } from "@/db/schema";
 import { inArray } from "drizzle-orm";
 import { jsonResponse } from "@/lib/api-helpers";
 
-// GET /api/shop — products with status COMING_SOON or AVAILABLE.
 export async function GET() {
   const items = await db
     .select()

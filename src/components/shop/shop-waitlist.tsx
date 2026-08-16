@@ -1,12 +1,4 @@
-// ============================================================================
-// shop-waitlist.tsx — email waitlist form for the shop page teaser.
-// ----------------------------------------------------------------------------
-// Client Component. The form is fully built but submission is deferred (no
-// backend yet). On submit we simulate a network request and show a success
-// state. When the owner wires a real provider, only the submit handler changes.
-//
-// Docs: https://ui.shadcn.com/docs/components/input
-// ==========================================================================
+// state. when the owner wires a real provider, only the submit handler changes
 "use client";
 
 import { useState } from "react";
@@ -16,11 +8,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
 export function ShopWaitlist() {
-  // email — controlled input value.
   const [email, setEmail] = useState("");
-  // submitting — disables the form while the fake request is in flight.
   const [submitting, setSubmitting] = useState(false);
-  // done — flips to a success state after "submission".
   const [done, setDone] = useState(false);
 
   const { toast } = useToast();
@@ -30,8 +19,7 @@ export function ShopWaitlist() {
     if (email.trim().length === 0) return;
 
     setSubmitting(true);
-    // Simulate a network round-trip so the loading state is visible.
-    // Replace with a real fetch to the waitlist provider when wired.
+    // simulate a network round-trip so the loading state is visible
     await new Promise((r) => setTimeout(r, 800));
     setSubmitting(false);
     setDone(true);
@@ -43,7 +31,6 @@ export function ShopWaitlist() {
   };
 
   if (done) {
-    // Success state — shown after "submission".
     return (
       <div className="flex items-center gap-3 rounded-xl border hairline bg-background p-4 shadow-premium-xs">
         <CheckCircle2 className="h-5 w-5 shrink-0 text-accent" />

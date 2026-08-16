@@ -1,22 +1,9 @@
-// ============================================================================
-// forum/page.tsx — forum thread list (publicly readable) with category filter.
-// ----------------------------------------------------------------------------
-// Server Component that fetches threads from the NestJS API. Anyone can read.
-// Supports filtering by category via the `?category=` search param.
-//
-// The category filter uses Next.js searchParams so the filter state is in the
-// URL (shareable, bookmarkable, back-button friendly). Each category chip is
-// a Link that updates the URL; the server re-renders with the filtered list.
-//
-// Docs:
-//   - Next.js searchParams: https://nextjs.org/docs/app/api-reference/functions/use-search-params
-// ==========================================================================
+// the category filter uses next.js searchparams so the filter state is in the
 import Link from "next/link";
 import { MessageSquare, Pin, Lock, Reply, Plus, Filter, Eye, Clock } from "lucide-react";
 import { apiFetch, type PaginatedThreads, type CategoryCount } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 
-// formatDate — relative-ish date for forum context.
 function formatDate(iso: string): string {
   return new Intl.DateTimeFormat("en-US", {
     month: "short",
@@ -27,8 +14,6 @@ function formatDate(iso: string): string {
   }).format(new Date(iso));
 }
 
-// getInitials — extracts up to 2 uppercase initials from a name for the avatar.
-// Falls back to "N" (for NiN.X) if the name is empty.
 function getInitials(name: string | null): string {
   if (!name) return "N";
   const parts = name.trim().split(/\s+/);
@@ -37,27 +22,21 @@ function getInitials(name: string | null): string {
 }
 
 export default async function ForumPage({
-  // searchParams — the URL query string, used for category filtering + sorting.
-  // In Next.js 16, searchParams is a Promise that must be awaited.
-  // Docs: https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams
+  // in next.js 16, searchparams is a promise that must be awaited
   searchParams,
 }: {
   searchParams: Promise<{ category?: string; sort?: string }>;
 }) {
-  // Await + extract the category filter + sort (if any).
   const { category, sort } = await searchParams;
   const activeCategory = category && category.trim().length > 0 ? category.trim() : undefined;
 
-  // Validate + normalize the sort param. Fall back to "newest" for invalid values.
   const validSorts = ["newest", "oldest", "views", "replies"];
   const activeSort = sort && validSorts.includes(sort) ? sort : "newest";
 
-  // Build the API URL with optional category filter + sort.
   const params = new URLSearchParams({ page: "1", pageSize: "20", sort: activeSort });
   if (activeCategory) params.set("category", activeCategory);
   const threadsUrl = `/api/forum/threads?${params.toString()}`;
 
-  // Fetch threads + categories in parallel for faster TTFB.
   const [threadsRes, catsRes] = await Promise.all([
     apiFetch<PaginatedThreads>(threadsUrl),
     apiFetch<CategoryCount[]>("/api/forum/categories"),
@@ -69,7 +48,6 @@ export default async function ForumPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      {/* ---- Page header ---- */}
       <div className="flex flex-col gap-4 border-b hairline pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight text-foreground">Forum</h1>
@@ -85,17 +63,12 @@ export default async function ForumPage({
         </Button>
       </div>
 
-      {/* ---- Category filter chips ---- */}
-      {/* Each chip is a Link that updates the URL search param. The "All" chip
-          links to /forum (no category param) to clear the filter. Chips
-          preserve the current sort param so filtering doesn't reset sorting. */}
       {categories.length > 0 && (
         <div className="mt-6 flex flex-wrap items-center gap-2">
           <span className="mr-1 inline-flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
             <Filter className="h-3 w-3" />
             Filter
           </span>
-          {/* "All" chip — clears the category filter but keeps the sort. */}
           <Link
             href={`/forum${activeSort !== "newest" ? `?sort=${activeSort}` : ""}`}
             className={`rounded-full border px-3 py-1 text-xs font-medium transition-all hover:-translate-y-0.5 ${
@@ -122,14 +95,11 @@ export default async function ForumPage({
         </div>
       )}
 
-      {/* ---- Sort controls ---- */}
-      {/* Row of sort links — preserves the current category filter. */}
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <span className="mr-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Sort
         </span>
         {(["newest", "oldest", "views", "replies"] as const).map((s) => {
-          // Build the href preserving the active category.
           const params = new URLSearchParams();
           if (activeCategory) params.set("category", activeCategory);
           if (s !== "newest") params.set("sort", s);
@@ -156,14 +126,11 @@ export default async function ForumPage({
         })}
       </div>
 
-      {/* ---- Thread list OR empty state ---- */}
       <div className="mt-8">
         {hasThreads ? (
           <ul className="divide-y hairline overflow-hidden rounded-2xl border hairline bg-card shadow-premium-xs">
             {threads.map((t) => {
-              // lastReply — the latest reply object (or null if no replies).
               const lastReply = t.replies && t.replies.length > 0 ? t.replies[0] : null;
-              // hasReplies — whether the thread has any replies (drives the accent border).
               const hasReplies = t._count.replies > 0;
               return (
                 <li key={t.id}>
@@ -173,14 +140,11 @@ export default async function ForumPage({
                       hasReplies ? "border-l-2 border-l-accent" : "border-l-2 border-l-transparent"
                     }`}
                   >
-                    {/* Left: author avatar circle with initials */}
                     <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-xs font-semibold text-accent">
                       {getInitials(t.author.name)}
                     </div>
 
-                    {/* Middle: title + meta + last reply snippet */}
                     <div className="min-w-0 flex-1">
-                      {/* Pin/lock badges inline with the title */}
                       {(t.pinned || t.locked) && (
                         <div className="mb-1 flex gap-1.5">
                           {t.pinned && (
@@ -207,31 +171,25 @@ export default async function ForumPage({
                           {t.category}
                         </span>
                         <span aria-hidden className="text-border">·</span>
-                        {/* "Last activity" — the latest reply's createdAt if any
-                            replies exist, otherwise the thread's createdAt. */}
+                        {/* "last activity" — the latest reply's createdat if any replies exist, otherwise the thread's createdat */}
                         <span className="inline-flex items-center gap-0.5">
                           <Clock className="h-3 w-3" />
                           {formatDate(lastReply ? lastReply.createdAt : t.createdAt)}
                         </span>
-                        {/* If there are replies, show a small "active" indicator. */}
                         {hasReplies && (
                           <span className="inline-flex items-center gap-0.5 text-accent">
                             · active
                           </span>
                         )}
                       </div>
-                      {/* Last reply snippet — shown only when there are replies.
-                          Uses a left teal border instead of a "replied:" prefix
-                          for a cleaner, more elegant quote style. */}
+                      
                       {lastReply && (
                         <div className="mt-2 flex items-start gap-2 border-l-2 border-accent/60 bg-secondary/40 py-2 pl-3 pr-2">
-                          {/* Last replier's avatar (smaller than the OP avatar) */}
                           <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent-soft text-[9px] font-semibold text-accent">
                             {(lastReply.author.name ?? "A").charAt(0).toUpperCase()}
                           </div>
                           <div className="min-w-0 flex-1">
-                            {/* Reply body snippet — 1 line, truncated.
-                                The replier's name is shown inline (muted) before the text. */}
+                            
                             <p className="truncate text-xs text-muted-foreground">
                               <span className="font-medium text-foreground/70">
                                 {lastReply.author.name ?? "Anonymous"}
@@ -244,13 +202,11 @@ export default async function ForumPage({
                       )}
                     </div>
 
-                    {/* Right: reply count + view count */}
                     <div className="flex shrink-0 flex-col items-end gap-1 text-xs text-muted-foreground">
                       <span className="inline-flex items-center gap-1">
                         <Reply className="h-3.5 w-3.5" />
                         {t._count.replies}
                       </span>
-                      {/* Views — shown if the field exists (added in schema v2). */}
                       {"views" in t && typeof t.views === "number" && (
                         <span className="inline-flex items-center gap-1">
                           <Eye className="h-3 w-3" />
@@ -264,7 +220,6 @@ export default async function ForumPage({
             })}
           </ul>
         ) : (
-          // Empty state — either no threads at all, or no threads in this category.
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed hairline bg-card px-6 py-16 text-center shadow-premium-xs">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent-soft">
               <MessageSquare className="h-6 w-6 text-accent" />

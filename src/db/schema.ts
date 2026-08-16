@@ -1,32 +1,14 @@
-// ============================================================================
-// schema.ts — Drizzle ORM schema for NiN.X.
-// ----------------------------------------------------------------------------
-// This schema defines every persistence concern for the site. It's written
-// with Drizzle's relational API so it works with BOTH the bun-sqlite driver
-// (local dev) and the d1 driver (Cloudflare production). Swapping drivers
-// is a one-line change in db/index.ts — the schema stays identical.
-//
-// Docs:
-//   - Drizzle SQLite columns: https://orm.drizzle.team/docs/column-types/sqlite
-//   - Drizzle relations: https://orm.drizzle.team/docs/rqb
-// ==========================================================================
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { relations, sql } from "drizzle-orm";
 
-// ----------------------------------------------------------------------------
-// USER — every account on NiN.X.
-// Includes the Auth.js (NextAuth) fields (emailVerified, image) plus our
-// custom fields (role, provider, banned).
-// ----------------------------------------------------------------------------
 export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
   name: text("name"),
   email: text("email").notNull().unique(),
   emailVerified: integer("email_verified", { mode: "timestamp_ms" }),
   image: text("image"),
-  // passwordHash — null for OAuth-only accounts.
+  // null for oauth-only accounts
   passwordHash: text("password_hash"),
-  // provider — records how the account was created (EMAIL / GOOGLE / APPLE).
   provider: text("provider").notNull().default("EMAIL"),
   providerId: text("provider_id"),
   role: text("role").notNull().default("MEMBER"),
@@ -41,12 +23,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   replies: many(forumReplies),
 }));
 
-// ----------------------------------------------------------------------------
-// ACCOUNT + SESSION + VERIFICATIONTOKEN — required by Auth.js (NextAuth)
-// with the Drizzle adapter. These tables store OAuth account linkage,
-// sessions, and email verification tokens.
-// Docs: https://authjs.dev/getting-started/adapters/drizzle
-// ----------------------------------------------------------------------------
+// account + session + verificationtoken — required by auth.js (nextauth)
 export const accounts = sqliteTable("accounts", {
   userId: text("user_id")
     .notNull()
@@ -77,9 +54,6 @@ export const verificationTokens = sqliteTable("verification_tokens", {
   expires: integer("expires", { mode: "timestamp" }).notNull(),
 });
 
-// ----------------------------------------------------------------------------
-// ARTICLE — the home feed content. Markdown body rendered client-side.
-// ----------------------------------------------------------------------------
 export const articles = sqliteTable("articles", {
   id: text("id").primaryKey(),
   slug: text("slug").notNull().unique(),
@@ -103,9 +77,6 @@ export const articlesRelations = relations(articles, ({ one }) => ({
   author: one(users, { fields: [articles.authorId], references: [users.id] }),
 }));
 
-// ----------------------------------------------------------------------------
-// FORUM — threads (top-level posts) + replies (nested under a thread).
-// ----------------------------------------------------------------------------
 export const forumThreads = sqliteTable("forum_threads", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
@@ -144,9 +115,6 @@ export const forumRepliesRelations = relations(forumReplies, ({ one }) => ({
   author: one(users, { fields: [forumReplies.authorId], references: [users.id] }),
 }));
 
-// ----------------------------------------------------------------------------
-// SHOP PRODUCT — placeholder model. Full commerce logic added later.
-// ----------------------------------------------------------------------------
 export const shopProducts = sqliteTable("shop_products", {
   id: text("id").primaryKey(),
   slug: text("slug").notNull().unique(),

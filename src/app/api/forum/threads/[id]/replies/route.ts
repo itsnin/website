@@ -1,6 +1,3 @@
-// ============================================================================
-// app/api/forum/threads/[id]/replies/route.ts — POST create a reply (auth).
-// ==========================================================================
 import { NextRequest } from "next/server";
 import { db } from "@/db";
 import { forumThreads, forumReplies, users } from "@/db/schema";
@@ -8,7 +5,6 @@ import { eq } from "drizzle-orm";
 import { createReplySchema } from "@/lib/validations";
 import { jsonResponse, errorResponse, requireAuth } from "@/lib/api-helpers";
 
-// POST /api/forum/threads/:id/replies
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -18,7 +14,6 @@ export async function POST(
 
   const { id: threadId } = await params;
 
-  // Verify the thread exists + isn't locked.
   const threadRows = await db
     .select({ id: forumThreads.id, locked: forumThreads.locked })
     .from(forumThreads)
@@ -28,7 +23,6 @@ export async function POST(
   if (!thread) return errorResponse("Thread not found", 404);
   if (thread.locked) return errorResponse("Thread is locked", 403);
 
-  // Validate the body.
   const body = await request.json().catch(() => null);
   const parsed = createReplySchema.safeParse(body);
   if (!parsed.success) {

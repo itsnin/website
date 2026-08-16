@@ -1,9 +1,3 @@
-// ============================================================================
-// seed.ts — seeds the local SQLite database with test data.
-// ----------------------------------------------------------------------------
-// Run with: bun run src/db/seed.ts
-// Creates: 1 owner user, 2 articles, 1 forum thread, 1 reply.
-// ==========================================================================
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./schema";
@@ -11,13 +5,11 @@ import * as schema from "./schema";
 const client = createClient({ url: "file:/home/z/my-project/db/ninx.db" });
 const db = drizzle(client, { schema });
 
-// now — current timestamp as a Date for Drizzle's timestamp mode.
-// Use slightly different timestamps for each entity so prev/next ordering works.
+// use slightly different timestamps for each entity so prev/next ordering works
 const now = new Date();
 const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
 const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);
 
-// Owner user.
 await db.insert(schema.users).values({
   id: "owner-1",
   email: "owner@nin.x",
@@ -33,7 +25,6 @@ await db.insert(schema.users).values({
   updatedAt: now,
 }).onConflictDoNothing();
 
-// Article 1: TypeScript patterns.
 await db.insert(schema.articles).values({
   id: "art-typescript-patterns",
   slug: "typescript-patterns-i-reach-for",
@@ -96,7 +87,6 @@ Stay typed out there.`,
   updatedAt: now,
 }).onConflictDoNothing();
 
-// Article 2: Welcome.
 await db.insert(schema.articles).values({
   id: "art-welcome",
   slug: "welcome-to-ninx",
@@ -123,7 +113,6 @@ Stay tuned for more.`,
   updatedAt: oneHourAgo,
 }).onConflictDoNothing();
 
-// Forum thread.
 await db.insert(schema.forumThreads).values({
   id: "thread-welcome",
   title: "Welcome to the forum",
@@ -137,7 +126,6 @@ await db.insert(schema.forumThreads).values({
   updatedAt: now,
 }).onConflictDoNothing();
 
-// Forum reply.
 await db.insert(schema.forumReplies).values({
   id: "reply-1",
   body: "This is a test reply to verify the last reply snippet feature works correctly.",

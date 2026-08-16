@@ -1,14 +1,4 @@
-// ============================================================================
-// reply-composer.tsx — client-side reply form for a forum thread.
-// ----------------------------------------------------------------------------
-// Submission is gated on auth status. We check /api/auth/status on mount;
-// if auth isn't ready yet (the owner hasn't wired OAuth), we show a friendly
-// "coming soon" notice instead of a broken form.
-//
-// Docs:
-//   - React hooks: https://react.dev/reference/react
-//   - shadcn Textarea: https://ui.shadcn.com/docs/components/textarea
-// ==========================================================================
+// "coming soon" notice instead of a broken form
 "use client";
 
 import { useEffect, useState } from "react";
@@ -24,23 +14,18 @@ interface ReplyComposerProps {
 }
 
 export function ReplyComposer({ threadId, locked }: ReplyComposerProps) {
-  // body — controlled textarea value.
   const [body, setBody] = useState("");
-  // submitting — disables the form while a request is in flight.
   const [submitting, setSubmitting] = useState(false);
-  // authStatus — fetched on mount to decide whether to show the form or a notice.
   const [authStatus, setAuthStatus] = useState<AuthStatus | null>(null);
 
   const { toast } = useToast();
 
-  // Fetch auth readiness once on mount.
   useEffect(() => {
     apiFetch<AuthStatus>("/api/auth/status").then((res) => {
       if (res.ok) setAuthStatus(res.data);
     });
   }, []);
 
-  // Locked thread — no posting allowed.
   if (locked) {
     return (
       <div className="flex items-center gap-3 rounded-xl border hairline bg-secondary px-5 py-4 text-sm text-muted-foreground">
@@ -50,7 +35,6 @@ export function ReplyComposer({ threadId, locked }: ReplyComposerProps) {
     );
   }
 
-  // Auth not ready — show the coming-soon state.
   if (authStatus && !authStatus.ready) {
     return (
       <div className="rounded-xl border border-dashed hairline bg-card px-5 py-6 text-center">
@@ -63,7 +47,6 @@ export function ReplyComposer({ threadId, locked }: ReplyComposerProps) {
     );
   }
 
-  // Auth ready (future state) — show the live form.
   const handleSubmit = async () => {
     if (body.trim().length === 0) return;
     setSubmitting(true);
@@ -74,7 +57,6 @@ export function ReplyComposer({ threadId, locked }: ReplyComposerProps) {
     setSubmitting(false);
 
     if (res.ok) {
-      // Clear the form + reload the page to show the new reply.
       setBody("");
       toast({ title: "Reply posted", description: "Your reply has been added." });
       window.location.reload();

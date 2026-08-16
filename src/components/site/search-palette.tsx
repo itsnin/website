@@ -1,14 +1,3 @@
-// ============================================================================
-// search-palette.tsx — global command-palette-style search.
-// ----------------------------------------------------------------------------
-// Opens via the header search button (which dispatches `ninx:open-search`) or
-// via the Cmd/Ctrl+K keyboard shortcut. Queries the NestJS /api/search
-// endpoint and shows live results from articles + forum threads.
-//
-// Docs:
-//   - shadcn Dialog: https://ui.shadcn.com/docs/components/dialog
-//   - Keyboard events: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
-// ==========================================================================
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -24,27 +13,20 @@ import {
 import { apiFetch, type SearchResult } from "@/lib/api-client";
 
 export function SearchPalette() {
-  // open — controls dialog visibility.
   const [open, setOpen] = useState(false);
-  // query — the current search string.
   const [query, setQuery] = useState("");
-  // results — the search response from the backend.
   const [results, setResults] = useState<SearchResult | null>(null);
-  // loading — true while a request is in flight (for the spinner).
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
-  // openPalette — exposed via a custom event so the header button can trigger it.
-  // useEffect with no deps registers the listener once on mount.
+  // openpalette — exposed via a custom event so the header button can trigger it
   useEffect(() => {
     const handler = () => setOpen(true);
     window.addEventListener("ninx:open-search", handler);
     return () => window.removeEventListener("ninx:open-search", handler);
   }, []);
 
-  // Cmd/Ctrl+K keyboard shortcut — standard pattern for command palettes.
-  // Docs: https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -56,8 +38,7 @@ export function SearchPalette() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  // performSearch — debounced search. We use a 300ms delay so we don't hammer
-  // the API on every keystroke. Implemented with a manual timeout + cleanup.
+  // performsearch — debounced search. we use a 300ms delay so we don't hammer
   const performSearch = useCallback(async (q: string) => {
     if (q.trim().length < 2) {
       setResults(null);
@@ -69,13 +50,11 @@ export function SearchPalette() {
     if (res.ok) setResults(res.data);
   }, []);
 
-  // Debounce the search call on every query change.
   useEffect(() => {
     const t = setTimeout(() => performSearch(query), 300);
     return () => clearTimeout(t);
   }, [query, performSearch]);
 
-  // navigate — closes the palette and routes to a result.
   const go = (path: string) => {
     setOpen(false);
     setQuery("");
@@ -87,13 +66,11 @@ export function SearchPalette() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-xl gap-0 overflow-hidden rounded-2xl border hairline p-0 shadow-premium-lg">
         <DialogHeader className="sr-only">
-          {/* sr-only: visible to screen readers, hidden visually.
-              Docs: https://tailwindcss.com/docs/screen-readers */}
+          {/* sr-only keeps header accessible to screen readers */}
           <DialogTitle>Search NiN.X</DialogTitle>
           <DialogDescription>Search articles and forum threads</DialogDescription>
         </DialogHeader>
 
-        {/* Search input row — subtle accent on focus. */}
         <div className="flex items-center gap-3 border-b hairline px-4 py-3">
           {loading ? (
             <Loader2 className="h-5 w-5 animate-spin text-accent" />
@@ -110,7 +87,6 @@ export function SearchPalette() {
           />
         </div>
 
-        {/* Results list — scrolls if long. */}
         <div className="max-h-80 overflow-y-auto">
           {!results || query.trim().length < 2 ? (
             <p className="px-4 py-8 text-center text-sm text-muted-foreground">

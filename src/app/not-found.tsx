@@ -1,18 +1,5 @@
-// ============================================================================
-// not-found.tsx — custom branded 404 page.
-// ----------------------------------------------------------------------------
-// Next.js renders this component automatically when a route doesn't exist or
-// when a Server Component calls notFound(). It's styled to match the site so
-// users don't see a jarring default error page.
-//
-// This file MUST be a Client Component because it uses `onClick` handlers
-// (to open the search palette and trigger history.back()). Server Components
-// cannot pass functions to client-rendered children.
-//
-// Docs:
-//   - not-found convention: https://nextjs.org/docs/app/api-reference/file-conventions/not-found
-//   - Client Components: https://nextjs.org/docs/app/building-your-application/rendering/client-components
-// ==========================================================================
+// next.js renders automatically when a route doesn't exist or
+// cannot pass functions to client-rendered children
 "use client";
 
 import Link from "next/link";
@@ -21,7 +8,6 @@ import { Home, Search, ArrowLeft } from "lucide-react";
 export default function NotFound() {
   return (
     <div className="mx-auto flex max-w-2xl flex-col items-center px-4 py-24 text-center sm:px-6">
-      {/* Big "404" in the accent color — anchors the page visually */}
       <p className="text-7xl font-semibold tracking-tight text-accent sm:text-8xl">404</p>
 
       <h1 className="mt-6 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
@@ -32,7 +18,6 @@ export default function NotFound() {
         moved. Try a search, or head back to the articles.
       </p>
 
-      {/* Action buttons — primary + outline, matching the hero pattern */}
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <Link
           href="/"
@@ -41,7 +26,6 @@ export default function NotFound() {
           <Home className="h-4 w-4" />
           Back home
         </Link>
-        {/* The search button dispatches the same custom event as the header. */}
         <button
           onClick={() => window.dispatchEvent(new CustomEvent("ninx:open-search"))}
           className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground shadow-premium-xs transition-all hover:-translate-y-0.5 hover:shadow-premium-sm"
@@ -51,7 +35,6 @@ export default function NotFound() {
         </button>
       </div>
 
-      {/* A subtle "go back" link as a secondary option */}
       <button
         onClick={() => window.history.back()}
         className="mt-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"

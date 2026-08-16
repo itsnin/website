@@ -1,22 +1,7 @@
-// ============================================================================
-// auth.ts — Auth.js (NextAuth) configuration.
-// ----------------------------------------------------------------------------
-// Uses the Drizzle adapter to store users/sessions/accounts in the SQLite
-// database. For production (Cloudflare D1), swap the db client to the D1
-// driver in db/index.ts — the adapter works with any Drizzle-compatible db.
-//
-// Providers:
-//   - Google OAuth (needs GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET env vars)
-//   - Apple OAuth (needs APPLE_* env vars)
-//   - Email/password (Credentials provider — needs a real password hashing impl)
-//
-// Until credentials are configured, the auth status endpoint reports all
-// providers as "not ready", and the frontend shows a "coming soon" state.
-//
-// Docs:
-//   - NextAuth v4: https://next-auth.js.org/getting-started/introduction
-//   - Drizzle adapter: https://authjs.dev/getting-started/adapters/drizzle
-// ==========================================================================
+// driver in db/index.ts — the adapter works with any drizzle-compatible db
+// google oauth (needs google_client_id + google_client_secret env vars)
+// apple oauth (needs apple_* env vars)
+// email/password (credentials provider — needs a real password hashing impl)
 import type { NextAuthOptions } from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import GoogleProvider from "next-auth/providers/google";
@@ -25,23 +10,17 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
 
-// authOptions — the central NextAuth configuration object.
-// Docs: https://next-auth.js.org/configuration/options
 export const authOptions: NextAuthOptions = {
-  // The Drizzle adapter handles user/session/account persistence.
   adapter: DrizzleAdapter(db, {
     usersTable: schema.users,
     accountsTable: schema.accounts,
     sessionsTable: schema.sessions,
     verificationTokensTable: schema.verificationTokens,
   }),
-  // session strategy — JWT (works without a database session lookup on every
-  // request, which is ideal for serverless/edge runtimes like Cloudflare).
   session: { strategy: "jwt" },
-  // pages — custom route for the sign-in page.
   pages: { signIn: "/auth" },
   providers: [
-    // Google OAuth — only enabled if credentials are present.
+    // google oauth — only enabled if credentials are present
     ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
       ? [
           GoogleProvider({
@@ -50,7 +29,7 @@ export const authOptions: NextAuthOptions = {
           }),
         ]
       : []),
-    // Apple OAuth — only enabled if credentials are present.
+    // apple oauth — only enabled if credentials are present
     ...(process.env.APPLE_CLIENT_ID && process.env.APPLE_CLIENT_SECRET
       ? [
           AppleProvider({
@@ -59,8 +38,7 @@ export const authOptions: NextAuthOptions = {
           }),
         ]
       : []),
-    // Credentials (email/password) — placeholder. Real implementation needs
-    // password hashing (bcrypt/argon2) + user lookup. Disabled until wired.
+    // credentials (email/password) — placeholder. real implementation needs
     CredentialsProvider({
       name: "Email",
       credentials: {
@@ -68,12 +46,10 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize() {
-        // Return null until real auth is wired. The frontend shows "coming soon".
         return null;
       },
     }),
   ],
-  // callbacks — attach the user id to the JWT + session.
   callbacks: {
     async jwt({ token, user }) {
       if (user) token.id = user.id;

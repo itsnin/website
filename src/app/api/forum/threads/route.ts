@@ -1,6 +1,3 @@
-// ============================================================================
-// app/api/forum/threads/route.ts — GET (list) + POST (create) threads.
-// ==========================================================================
 import { NextRequest } from "next/server";
 import { db } from "@/db";
 import { forumThreads, forumReplies, users } from "@/db/schema";
@@ -8,7 +5,6 @@ import { eq, desc, asc, sql, and, or, like } from "drizzle-orm";
 import { forumListQuerySchema, createThreadSchema } from "@/lib/validations";
 import { jsonResponse, errorResponse, requireAuth } from "@/lib/api-helpers";
 
-// GET /api/forum/threads — public list with pagination + category filter + sort.
 export async function GET(request: NextRequest) {
   const query = forumListQuerySchema.safeParse(
     Object.fromEntries(request.nextUrl.searchParams),
@@ -19,10 +15,8 @@ export async function GET(request: NextRequest) {
   const limit = Math.min(pageSize, 50);
   const offset = (page - 1) * limit;
 
-  // Build where clause: optional category filter.
   const where = category ? and(eq(forumThreads.category, category)) : undefined;
 
-  // Build orderBy based on sort. Pinned always first.
   const orderBy =
     sort === "oldest"
       ? [desc(forumThreads.pinned), asc(forumThreads.createdAt)]
@@ -30,8 +24,6 @@ export async function GET(request: NextRequest) {
         ? [desc(forumThreads.pinned), desc(forumThreads.views)]
         : [desc(forumThreads.pinned), desc(forumThreads.createdAt)];
 
-  // For "replies" sort, we need to fetch all + sort in JS (SQLite can't order
-  // by a relation count in a single query via Drizzle's API).
   if (sort === "replies") {
     const allThreads = await db
       .select({
@@ -53,7 +45,6 @@ export async function GET(request: NextRequest) {
       .where(where)
       .orderBy(desc(forumThreads.pinned), desc(forumThreads.createdAt));
 
-    // Load the latest reply for each thread (for "last activity" + snippet).
     const threadIds = allThreads.map((t) => t.id);
     let latestReplies: Array<{
       threadId: string;
@@ -77,13 +68,12 @@ export async function GET(request: NextRequest) {
         .orderBy(desc(forumReplies.createdAt));
     }
 
-    // Group latest replies by thread (take the first = most recent per thread).
+    // group latest replies by thread (take the first = most recent per thread)
     const replyMap = new Map<string, typeof latestReplies[number]>();
     for (const r of latestReplies) {
       if (!replyMap.has(r.threadId)) replyMap.set(r.threadId, r);
     }
 
-    // Attach reply count + latest reply to each thread.
     const enriched = allThreads.map((t) => ({
       ...t,
       author: { name: t.authorName, avatarUrl: t.authorAvatarUrl },
@@ -97,7 +87,6 @@ export async function GET(request: NextRequest) {
         : [],
     }));
 
-    // Sort: pinned first, then by reply count desc, then createdAt desc.
     enriched.sort((a, b) => {
       if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
       const diff = b._count.replies - a._count.replies;
@@ -110,7 +99,6 @@ export async function GET(request: NextRequest) {
     return jsonResponse({ items, total, page, pageSize: limit });
   }
 
-  // Non-"replies" sorts — use Drizzle's orderBy directly.
   const items = await db
     .select({
       id: forumThreads.id,
@@ -133,7 +121,6 @@ export async function GET(request: NextRequest) {
     .limit(limit)
     .offset(offset);
 
-  // Load latest replies for these threads.
   const threadIds = items.map((t) => t.id);
   let latestReplies: Array<{
     threadId: string;
@@ -175,7 +162,6 @@ export async function GET(request: NextRequest) {
       : [],
   }));
 
-  // Count total for pagination.
   const totalRows = where
     ? await db.select({ count: sql<number>`count(*)` }).from(forumThreads).where(where)
     : await db.select({ count: sql<number>`count(*)` }).from(forumThreads);
@@ -184,7 +170,7 @@ export async function GET(request: NextRequest) {
   return jsonResponse({ items: enrichedItems, total, page, pageSize: limit });
 }
 
-// POST /api/forum/threads — create a new thread (auth required).
+// post /api/forum/threads — create a new thread (auth required)
 export async function POST(request: NextRequest) {
   const user = await requireAuth().catch((r) => r);
   if (user instanceof Response) return user;

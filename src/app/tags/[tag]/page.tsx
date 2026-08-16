@@ -1,11 +1,3 @@
-// ============================================================================
-// tags/[tag]/page.tsx — list articles for a specific tag.
-// ----------------------------------------------------------------------------
-// Server Component. Fetches articles matching the tag and renders them in a
-// grid using the same ArticleCard component as the home page.
-//
-// Docs: https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes
-// ==========================================================================
 import Link from "next/link";
 import { ArrowLeft, Tag } from "lucide-react";
 import { apiFetch, type PaginatedArticles } from "@/lib/api-client";
@@ -16,13 +8,9 @@ export default async function TagPage({
 }: {
   params: Promise<{ tag: string }>;
 }) {
-  // Decode the tag from the URL (e.g., "typescript" from /tags/typescript).
-  // decodeURIComponent reverses the encoding done by encodeURIComponent in links.
-  // Docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent
   const { tag } = await params;
   const decodedTag = decodeURIComponent(tag);
 
-  // Fetch articles for this tag.
   const res = await apiFetch<PaginatedArticles>(
     `/api/articles/by-tag/${encodeURIComponent(decodedTag)}?page=1&pageSize=20`,
   );
@@ -31,7 +19,6 @@ export default async function TagPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      {/* ---- Back link ---- */}
       <Link
         href="/tags"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -40,7 +27,6 @@ export default async function TagPage({
         All tags
       </Link>
 
-      {/* ---- Page header ---- */}
       <div className="mt-6 border-b hairline pb-6">
         <div className="flex items-center gap-2 text-accent">
           <Tag className="h-5 w-5" />
@@ -54,7 +40,6 @@ export default async function TagPage({
         </p>
       </div>
 
-      {/* ---- Article grid OR empty state ---- */}
       {hasArticles ? (
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {articles.map((article) => (

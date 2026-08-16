@@ -1,6 +1,3 @@
-// ============================================================================
-// app/api/articles/by-tag/[tag]/route.ts — GET articles for a tag.
-// ==========================================================================
 import { NextRequest } from "next/server";
 import { db } from "@/db";
 import { articles, users } from "@/db/schema";
@@ -8,7 +5,6 @@ import { eq, like, desc } from "drizzle-orm";
 import { paginationSchema } from "@/lib/validations";
 import { jsonResponse } from "@/lib/api-helpers";
 
-// GET /api/articles/by-tag/:tag
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ tag: string }> },
@@ -23,8 +19,6 @@ export async function GET(
   const limit = Math.min(pageSize, 50);
   const offset = (page - 1) * limit;
 
-  // Match articles whose tags contain the decoded tag (comma-boundary aware
-  // via OR on 4 patterns: middle, start, end, exact).
   const items = await db
     .select({
       id: articles.id,
@@ -43,17 +37,16 @@ export async function GET(
     .from(articles)
     .leftJoin(users, eq(articles.authorId, users.id))
     .where(
-      // SQLite `like` is case-insensitive for ASCII.
-      // We check 4 patterns to avoid partial-word matches.
-      // Drizzle doesn't have an `or` for arbitrary conditions directly, so
-      // we use the `or` helper imported above.
+      // we check 4 patterns to avoid partial-word matches
+      // drizzle doesn't have an `or` for arbitrary conditions directly, so
+      // we use the `or` helper imported above
       like(articles.tags, `%,${decodedTag},%`),
     )
     .orderBy(desc(articles.createdAt))
     .limit(limit)
     .offset(offset);
 
-  // Also match start/end/exact patterns in a second query (simpler than OR).
+  // also match start/end/exact patterns in a second query (simpler than or)
   const extra = await db
     .select({
       id: articles.id,
@@ -77,7 +70,6 @@ export async function GET(
     .orderBy(desc(articles.createdAt))
     .limit(limit);
 
-  // Deduplicate by id (an article may match both patterns).
   const seen = new Set<string>();
   const all = [...items, ...extra].filter((a) => {
     if (seen.has(a.id)) return false;
@@ -85,7 +77,7 @@ export async function GET(
     return true;
   });
 
-  // Also match exact single-tag + end patterns.
+  // also match exact single-tag + end patterns
   const exact = await db
     .select({
       id: articles.id,
@@ -114,7 +106,7 @@ export async function GET(
     }
   }
 
-  // Also match exact (single tag = the decoded tag).
+  // also match exact (single tag = the decoded tag)
   const singleTag = await db
     .select({
       id: articles.id,
@@ -141,7 +133,6 @@ export async function GET(
     }
   }
 
-  // Sort by createdAt desc, slice for pagination.
   all.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   const paged = all.slice(offset, offset + limit);
 

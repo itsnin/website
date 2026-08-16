@@ -1,22 +1,14 @@
-// ============================================================================
-// app/api/stats/route.ts — GET aggregate site statistics.
-// ==========================================================================
 import { db } from "@/db";
 import { articles, forumThreads, forumReplies } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { jsonResponse } from "@/lib/api-helpers";
 
-// GET /api/stats — returns articles/threads/replies/repos/totalStars/totalViews.
 export async function GET() {
-  // Run all counts in parallel for minimum latency.
   const [articleCount, threadCount, replyCount, viewSum, repoData] = await Promise.all([
     db.select({ count: sql<number>`count(*)` }).from(articles).where(eq(articles.published, true)),
     db.select({ count: sql<number>`count(*)` }).from(forumThreads),
     db.select({ count: sql<number>`count(*)` }).from(forumReplies),
-    // Sum of views across published articles.
     db.select({ sum: sql<number>`coalesce(sum(${articles.views}), 0)` }).from(articles).where(eq(articles.published, true)),
-    // GitHub repos — fetched from the GitHub API. We call our own route handler
-    // logic by importing fetch (simpler than refactoring the github route).
     fetchGitHubRepos(),
   ]);
 
@@ -33,8 +25,7 @@ export async function GET() {
   });
 }
 
-// fetchGitHubRepos — helper that mirrors the /api/github/repos logic.
-// In a production app, we'd refactor this into a shared service.
+// fetchgithubrepos — helper that mirrors the /api/github/repos logic
 async function fetchGitHubRepos(): Promise<Array<{ stargazers_count: number }>> {
   const username = process.env.GITHUB_USERNAME;
   if (!username) return [];

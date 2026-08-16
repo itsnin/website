@@ -1,31 +1,18 @@
-// ============================================================================
-// popular-tags.tsx — compact tag cloud for the home page.
-// ----------------------------------------------------------------------------
-// Server Component. Fetches all tags with counts and renders the top N as
-// small pills linking to /tags/[tag]. Gives the home page more content
-// discoverability without taking much vertical space.
-//
-// Docs: https://nextjs.org/docs/app/building-your-application/rendering/server-components
-// ==========================================================================
 import Link from "next/link";
 import { Tag, ArrowRight } from "lucide-react";
 import { apiFetch, type TagCount } from "@/lib/api-client";
 
 export async function PopularTags() {
-  // Fetch all tags (already sorted by count desc in the service).
   const res = await apiFetch<TagCount[]>("/api/articles/tags");
   const tags = res.ok ? res.data : [];
 
-  // Don't render the section if there are no tags yet.
   if (tags.length === 0) return null;
 
-  // Show up to 8 tags.
   const topTags = tags.slice(0, 8);
 
   return (
     <section className="border-t hairline bg-background">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        {/* Header row — title + "browse all" link */}
         <div className="flex items-end justify-between border-b hairline pb-4">
           <div>
             <h2 className="text-xl font-semibold tracking-tight text-foreground">
@@ -44,7 +31,7 @@ export async function PopularTags() {
           </Link>
         </div>
 
-        {/* Tag pills — flex-wrap so they flow nicely on any width. */}
+        {/* tag pills — flex-wrap so they flow nicely on any width */}
         <div className="mt-6 flex flex-wrap gap-2.5">
           {topTags.map(({ tag, count }) => (
             <Link

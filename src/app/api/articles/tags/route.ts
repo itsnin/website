@@ -1,20 +1,15 @@
-// ============================================================================
-// app/api/articles/tags/route.ts — GET all tags with counts.
-// ==========================================================================
 import { db } from "@/db";
 import { articles } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { jsonResponse } from "@/lib/api-helpers";
 
-// GET /api/articles/tags — returns [{tag, count}] sorted by count desc.
 export async function GET() {
-  // Fetch all published articles' tags.
   const rows = await db
     .select({ tags: articles.tags })
     .from(articles)
     .where(eq(articles.published, true));
 
-  // Aggregate counts per tag in JS (tags are comma-separated).
+  // aggregate counts per tag in js (tags are comma-separated)
   const counts = new Map<string, number>();
   for (const r of rows) {
     const tags = r.tags.split(",").map((t) => t.trim()).filter(Boolean);

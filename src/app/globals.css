@@ -70,9 +70,7 @@
 :root {
   --radius: 0.75rem;
 
-  /* whitish — dominant surface color */
   --background: oklch(0.972 0.003 247);
-  /* blackish — secondary color for text and high contrast */
   --foreground: oklch(0.145 0.005 247);
 
   --card: oklch(1 0 0);
@@ -80,30 +78,25 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0.005 247);
 
-  /* primary = blackish */
   --primary: oklch(0.145 0.005 247);
   --primary-foreground: oklch(0.985 0 0);
 
-  /* secondary = subtle whitish shade */
   --secondary: oklch(0.935 0.004 247);
   --secondary-foreground: oklch(0.145 0.005 247);
 
   --muted: oklch(0.935 0.004 247);
   --muted-foreground: oklch(0.45 0.008 247);
 
-  /* accent = blackish (no other colors) */
   --accent: oklch(0.145 0.005 247);
   --accent-foreground: oklch(0.985 0 0);
   --accent-soft: oklch(0.145 0.005 247 / 0.06);
 
-  /* semantic = shades of blackish */
   --destructive: oklch(0.145 0.005 247);
 
   --border: oklch(0.875 0.004 247);
   --input: oklch(0.875 0.004 247);
   --ring: oklch(0.145 0.005 247);
 
-  /* chart palette = monochrome shades */
   --chart-1: oklch(0.145 0.005 247);
   --chart-2: oklch(0.35 0.006 247);
   --chart-3: oklch(0.55 0.006 247);

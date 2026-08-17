@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { User, Sparkles, Code2, ArrowRight, Clock, Github, Twitter } from "lucide-react";
+import { User, Sparkles, Code2, ArrowRight, Clock, Github } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -7,7 +7,7 @@ export default function AboutPage() {
       <div className="border-b hairline pb-6">
         <h1 className="text-3xl font-semibold tracking-tight text-foreground">About</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          The person behind NiN.
+          The person behind NiN — Nahian Islam Nafseen.
         </p>
       </div>
 
@@ -18,22 +18,19 @@ export default function AboutPage() {
           </div>
           <h2 className="text-lg font-semibold tracking-tight text-foreground">Bio</h2>
         </div>
+
         <div className="mt-4 overflow-hidden rounded-2xl border hairline bg-card shadow-premium-sm">
           <div
             aria-hidden
-            className="h-20 w-full"
-            style={{
-              background:
-                "linear-gradient(135deg, oklch(0.5 0.11 200 / 0.15), oklch(0.62 0.11 230 / 0.10))",
-            }}
+            className="h-20 w-full bg-secondary"
           />
           <div className="px-6 pb-6 sm:px-8 sm:pb-8">
             <div className="-mt-12 flex h-24 w-24 items-center justify-center rounded-2xl border-4 border-card bg-accent-soft text-3xl font-semibold text-accent shadow-premium-sm">
               N
             </div>
             <div className="mt-4">
-              <h3 className="text-2xl font-semibold tracking-tight text-foreground">NiN</h3>
-              <p className="mt-1 text-sm font-medium text-accent">Developer · Writer · Open source</p>
+              <h3 className="text-2xl font-semibold tracking-tight text-foreground">Nahian Islam Nafseen</h3>
+              <p className="mt-1 text-sm font-medium text-muted-foreground">Developer · Writer · Open source</p>
             </div>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
               Hi — I build things in the open and write about the process.
@@ -42,31 +39,22 @@ export default function AboutPage() {
               land here as the site grows.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-3">
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-medium text-foreground">
                 <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-foreground opacity-50" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-foreground" />
                 </span>
                 Currently building NiN
               </div>
               <div className="flex items-center gap-2">
                 <a
-                  href="https://github.com"
+                  href="https://github.com/itsnin"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-full border hairline bg-background px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:text-accent"
+                  className="inline-flex items-center gap-1 rounded-full border hairline bg-background px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
                 >
                   <Github className="h-3 w-3" />
                   GitHub
-                </a>
-                <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-full border hairline bg-background px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:text-accent"
-                >
-                  <Twitter className="h-3 w-3" />
-                  X
                 </a>
               </div>
             </div>
@@ -108,7 +96,7 @@ export default function AboutPage() {
         </div>
         <div className="mt-4 rounded-2xl border hairline bg-card p-6 shadow-premium-xs">
           <div className="flex flex-wrap gap-2">
-            {["Next.js", "NestJS", "TypeScript", "Prisma", "Tailwind", "React"].map((tech) => (
+            {["Next.js", "React", "TypeScript", "Tailwind CSS", "Drizzle ORM", "libSQL"].map((tech) => (
               <span
                 key={tech}
                 className="rounded-full border hairline bg-background px-3 py-1 text-xs font-medium text-muted-foreground"
@@ -125,7 +113,7 @@ export default function AboutPage() {
 
       <div className="mt-10 flex flex-col items-center gap-3 rounded-2xl border border-dashed hairline bg-card p-6 text-center shadow-premium-xs sm:flex-row sm:justify-between sm:text-left">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Clock className="h-4 w-4 text-accent" />
+          <Clock className="h-4 w-4" />
           This section is a work in progress.
         </div>
         <Link

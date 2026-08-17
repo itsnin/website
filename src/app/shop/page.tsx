@@ -14,7 +14,7 @@ export default async function ShopPage() {
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 50% 0%, oklch(0.5 0.11 200 / 0.08), transparent 60%)",
+            "radial-gradient(ellipse 60% 50% at 50% 0%, oklch(0.145 0.005 247 / 0.06), transparent 60%)",
         }}
       />
 

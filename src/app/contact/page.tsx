@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, MessageSquare, Github, ArrowUpRight, Clock } from "lucide-react";
+import { Mail, MessageSquare, Github, ArrowUpRight } from "lucide-react";
 
 export default function ContactPage() {
   return (
@@ -12,20 +12,22 @@ export default function ContactPage() {
       </div>
 
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="group flex flex-col rounded-2xl border hairline bg-card p-6 shadow-premium-xs transition-all hover:-translate-y-1 hover:shadow-premium-md">
+        <a
+          href="mailto:ninx.sh@gmail.com"
+          className="group flex flex-col rounded-2xl border hairline bg-card p-6 shadow-premium-xs transition-all hover:-translate-y-1 hover:shadow-premium-md"
+        >
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-soft">
             <Mail className="h-5 w-5 text-accent" />
           </div>
           <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">Email</h3>
           <p className="mt-1 flex-1 text-sm leading-relaxed text-muted-foreground">
-            For questions, feedback, or private messages. A contact address will
-            be listed here soon.
+            For questions, feedback, or private messages.
           </p>
-          <div className="mt-4 inline-flex items-center gap-1.5 self-start rounded-full bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground">
-            <Clock className="h-3 w-3" />
-            Coming soon
+          <div className="mt-4 inline-flex items-center gap-1 self-start text-sm font-medium text-accent transition-opacity group-hover:opacity-80">
+            ninx.sh@gmail.com
+            <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
-        </div>
+        </a>
 
         <Link
           href="/forum"
@@ -46,7 +48,7 @@ export default function ContactPage() {
         </Link>
 
         <a
-          href="https://github.com"
+          href="https://github.com/itsnin"
           target="_blank"
           rel="noopener noreferrer"
           className="group flex flex-col rounded-2xl border hairline bg-card p-6 shadow-premium-xs transition-all hover:-translate-y-1 hover:shadow-premium-md"
@@ -56,11 +58,10 @@ export default function ContactPage() {
           </div>
           <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">GitHub</h3>
           <p className="mt-1 flex-1 text-sm leading-relaxed text-muted-foreground">
-            Browse the code, open issues, or contribute. The owner&apos;s GitHub
-            handle will be configured soon.
+            Browse the code, open issues, or contribute.
           </p>
           <div className="mt-4 inline-flex items-center gap-1 self-start text-sm font-medium text-accent transition-opacity group-hover:opacity-80">
-            View profile
+            @itsnin
             <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
         </a>

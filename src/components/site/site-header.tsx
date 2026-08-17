@@ -43,8 +43,7 @@ export function SiteHeader() {
           className="text-xl font-semibold tracking-tight text-foreground"
           aria-label="NiN home"
         >
-          <span>NiN</span>
-          <span className="text-accent">.X</span>
+          NiN
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">

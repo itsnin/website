@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 export function jsonResponse(data: unknown, status: number = 200): NextResponse {
   return NextResponse.json(data, { status });
@@ -14,10 +14,12 @@ export function errorResponse(message: string, status: number = 400): NextRespon
 }
 
 export async function getServerSessionUser(): Promise<{ id: string; email: string; name: string | null } | null> {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) return null;
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session?.user) return null;
   return {
-    id: session.user.id ?? session.user.email,
+    id: session.user.id,
     email: session.user.email,
     name: session.user.name ?? null,
   };

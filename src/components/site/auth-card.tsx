@@ -27,7 +27,7 @@ export function AuthCard() {
         variant="outline"
         className="w-full"
         disabled={!status.google}
-        onClick={() => (window.location.href = "/api/auth/google")}
+        onClick={() => (window.location.href = "/api/auth/sign-in/google")}
       >
         <Chrome className="mr-2 h-4 w-4" />
         Continue with Google
@@ -37,7 +37,7 @@ export function AuthCard() {
         variant="outline"
         className="mt-3 w-full"
         disabled={!status.apple}
-        onClick={() => (window.location.href = "/api/auth/apple")}
+        onClick={() => (window.location.href = "/api/auth/sign-in/apple")}
       >
         <Apple className="mr-2 h-4 w-4" />
         Continue with Apple

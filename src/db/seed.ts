@@ -1,24 +1,19 @@
-import { createClient } from "@libsql/client";
-import { drizzle } from "drizzle-orm/libsql";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 
-const client = createClient({ url: "file:/home/z/my-project/db/nin.db" });
-const db = drizzle(client, { schema });
+const sql = neon(process.env.DATABASE_URL ?? "");
+const db = drizzle(sql, { schema });
 
 const now = new Date();
 const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
-const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);
 
 await db.insert(schema.users).values({
   id: "owner-1",
   email: "owner@nin.x",
   name: "NiN",
   role: "OWNER",
-  provider: "EMAIL",
-  emailVerified: null,
-  image: null,
   passwordHash: null,
-  providerId: null,
   banned: false,
   createdAt: now,
   updatedAt: now,
@@ -30,11 +25,9 @@ await db.insert(schema.articles).values({
   title: "TypeScript patterns I reach for",
   excerpt: "A few TypeScript patterns that make my code safer and easier to read.",
   body: `# TypeScript patterns I reach for
-
 A few patterns I keep coming back to.
 
 ## Discriminated unions
-
 Discriminated unions are the single most powerful TypeScript feature for modeling state.
 
 \`\`\`typescript
@@ -42,38 +35,13 @@ type Result<T> =
   | { status: "loading" }
   | { status: "success", data: T }
   | { status: "error", error: string };
-
-function handle<T>(r: Result<T>): string {
-  switch (r.status) {
-    case "loading":
-      return "Loading…";
-    case "success":
-      return \`Got \${r.data}\`;
-    case "error":
-      return \`Failed: \${r.error}\`;
-  }
-}
 \`\`\`
 
 ## The \`satisfies\` operator
-
 \`satisfies\` lets you check a value matches a type *without* widening it.
 
-\`\`\`typescript
-const config = {
-  port: 4000,
-  host: "localhost",
-} satisfies Record<string, string | number>;
-\`\`\`
-
 ## Branded types
-
 Useful for preventing mix-ups between IDs.
-
-\`\`\`typescript
-type UserId = string & { readonly __brand: "UserId" };
-type ArticleId = string & { readonly __brand: "ArticleId" };
-\`\`\`
 
 Stay typed out there.`,
   tags: "typescript,patterns,intro",
@@ -92,11 +60,9 @@ await db.insert(schema.articles).values({
   title: "Welcome to NiN",
   excerpt: "A quick introduction to what this site is and what is coming next.",
   body: `# Welcome
-
 This is the first article on **NiN**.
 
 ## What to expect
-
 - Technical articles
 - Open-source projects
 - Community discussion
@@ -135,4 +101,3 @@ await db.insert(schema.forumReplies).values({
 }).onConflictDoNothing();
 
 console.log("Seed complete: 1 user, 2 articles, 1 thread, 1 reply");
-client.close();

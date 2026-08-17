@@ -1,59 +1,104 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import {
+  pgTable,
+  text,
+  integer,
+  boolean,
+  timestamp,
+  primaryKey,
+} from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
-export const users = sqliteTable("users", {
+// better auth core tables + custom fields
+export const users = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name"),
   email: text("email").notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "timestamp_ms" }),
+  emailVerified: timestamp("email_verified", { withTimezone: true }),
   image: text("image"),
-  // null for oauth-only accounts
   passwordHash: text("password_hash"),
-  provider: text("provider").notNull().default("EMAIL"),
-  providerId: text("provider_id"),
   role: text("role").notNull().default("MEMBER"),
-  banned: integer("banned", { mode: "boolean" }).notNull().default(false),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+  banned: boolean("banned").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+  sessions: many(sessions),
   articles: many(articles),
   threads: many(forumThreads),
   replies: many(forumReplies),
 }));
 
-export const accounts = sqliteTable("accounts", {
+export const accounts = pgTable(
+  "account",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    provider: text("provider").notNull(),
+    accountId: text("account_id").notNull(),
+    accessToken: text("access_token"),
+    refreshToken: text("refresh_token"),
+    expiresAt: timestamp("expires_at", { withTimezone: true }),
+    idToken: text("id_token"),
+    scope: text("scope"),
+    password: text("password"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .default(sql`now()`),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .default(sql`now()`),
+  },
+  (table) => ({
+    compoundKey: primaryKey({ columns: [table.provider, table.accountId] }),
+  }),
+);
+
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, { fields: [accounts.userId], references: [users.id] }),
+}));
+
+export const sessions = pgTable("session", {
+  id: text("id").primaryKey(),
   userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  type: text("type").notNull(),
-  provider: text("provider").notNull(),
-  providerAccountId: text("provider_account_id").notNull(),
-  refresh_token: text("refresh_token"),
-  access_token: text("access_token"),
-  expires_at: integer("expires_at"),
-  token_type: text("token_type"),
-  scope: text("scope"),
-  id_token: text("id_token"),
-  session_state: text("session_state"),
-});
-
-export const sessions = sqliteTable("sessions", {
-  sessionToken: text("session_token").primaryKey(),
-  userId: text("user_id")
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  token: text("token").notNull().unique(),
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  expires: integer("expires", { mode: "timestamp" }).notNull(),
+    .default(sql`now()`),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
 });
 
-export const verificationTokens = sqliteTable("verification_tokens", {
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, { fields: [sessions.userId], references: [users.id] }),
+}));
+
+export const verification = pgTable("verification", {
+  id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
-  token: text("token").notNull(),
-  expires: integer("expires", { mode: "timestamp" }).notNull(),
+  value: text("value").notNull(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
 });
 
-export const articles = sqliteTable("articles", {
+// custom domain tables
+export const articles = pgTable("articles", {
   id: text("id").primaryKey(),
   slug: text("slug").notNull().unique(),
   title: text("title").notNull(),
@@ -62,33 +107,41 @@ export const articles = sqliteTable("articles", {
   coverImage: text("cover_image"),
   tags: text("tags").notNull().default(""),
   readingMins: integer("reading_mins").notNull().default(1),
-  published: integer("published", { mode: "boolean" }).notNull().default(false),
-  featured: integer("featured", { mode: "boolean" }).notNull().default(false),
+  published: boolean("published").notNull().default(false),
+  featured: boolean("featured").notNull().default(false),
   views: integer("views").notNull().default(0),
   authorId: text("author_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
 });
 
 export const articlesRelations = relations(articles, ({ one }) => ({
   author: one(users, { fields: [articles.authorId], references: [users.id] }),
 }));
 
-export const forumThreads = sqliteTable("forum_threads", {
+export const forumThreads = pgTable("forum_threads", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
   body: text("body").notNull().default(""),
   category: text("category").notNull().default("general"),
-  pinned: integer("pinned", { mode: "boolean" }).notNull().default(false),
-  locked: integer("locked", { mode: "boolean" }).notNull().default(false),
+  pinned: boolean("pinned").notNull().default(false),
+  locked: boolean("locked").notNull().default(false),
   views: integer("views").notNull().default(0),
   authorId: text("author_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
 });
 
 export const forumThreadsRelations = relations(forumThreads, ({ one, many }) => ({
@@ -96,7 +149,7 @@ export const forumThreadsRelations = relations(forumThreads, ({ one, many }) => 
   replies: many(forumReplies),
 }));
 
-export const forumReplies = sqliteTable("forum_replies", {
+export const forumReplies = pgTable("forum_replies", {
   id: text("id").primaryKey(),
   body: text("body").notNull(),
   threadId: text("thread_id")
@@ -105,8 +158,12 @@ export const forumReplies = sqliteTable("forum_replies", {
   authorId: text("author_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
 });
 
 export const forumRepliesRelations = relations(forumReplies, ({ one }) => ({
@@ -114,7 +171,7 @@ export const forumRepliesRelations = relations(forumReplies, ({ one }) => ({
   author: one(users, { fields: [forumReplies.authorId], references: [users.id] }),
 }));
 
-export const shopProducts = sqliteTable("shop_products", {
+export const shopProducts = pgTable("shop_products", {
   id: text("id").primaryKey(),
   slug: text("slug").notNull().unique(),
   name: text("name").notNull(),
@@ -123,6 +180,10 @@ export const shopProducts = sqliteTable("shop_products", {
   currency: text("currency").notNull().default("USD"),
   image: text("image"),
   status: text("status").notNull().default("DRAFT"),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
 });
